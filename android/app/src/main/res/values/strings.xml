@@ -1,0 +1,7 @@
+<?xml version='1.1' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Carnet Rehabilitar-C</string>
+    <string name="title_activity_main">Carnet Rehabilitar-C</string>
+    <string name="package_name">com.CarnetRehabilitarC.app</string>
+    <string name="custom_url_scheme">com.CarnetRehabilitarC.app</string>
+</resources>

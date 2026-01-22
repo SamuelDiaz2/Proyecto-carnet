@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Admin</title>
+    <link rel="stylesheet" href="styleadmin.css">
+</head>
+<body>
+<div id="section-login">
+    <div class="container">
+        <h2>Login Administrativo</h2>
+        <form id="loginForm">
+    
+            <input type="email" id="adminEmail" placeholder="Correo electrónico" autocomplete="username">
+            <input type="password" id="adminPass" placeholder="Contraseña" autocomplete="current-password">
+            <p id="mensaje"></p>
+            <button id="btnLoginAdmin">Entrar</button>
+
+        </form>
+    </div>
+</div>
+
+<div id="section-admin">
+
+    <div class="container">
+        <button id="btnDashboard" style="background-color: blue; float: left;">Carnet</button>
+        <button id="btnLogoutAdmin" style="background: #7f8c8d; float: right;">Cerrar Sesión</button>
+        <h2>Panel de Gestión</h2>
+        <hr>
+        <h4>Autorizar Nuevo Documento</h4>
+        <input type="text" id="newNombre" placeholder="Nombre Completo">
+        <input type="text" id="newCedula" placeholder="Número de Documento">
+        <input type="file" id="carnet" accept="image/*">
+        <p id="mensajeGuardar"></p>
+        <button id="btnGuardar">Autorizar Usuario</button>
+        <hr>
+        <table class="table-wrapper">
+            <thead>
+                <tr><th>Cédula</th><th>Nombre</th><th>Fecha</th><th>Acción</th></tr>
+            </thead>
+            <tbody id="listaUsuarios"></tbody>
+            <div id="confirmar"></div>
+        </table>
+    </div>
+
+        <div id="preview-container" style="margin-top: 30px;">
+        <h4>Vista Previa del Carnet:</h4>
+        <div class="carnet"> 
+            <div class="carnet-header">
+                <h3>REHABILITAR-C</h3>
+            </div>
+            
+            <div class="carnet-body">
+                <div class="foto-container" style="margin-top: 10px;">
+                    <img id="previewFoto" alt="Foto" src="./imagenes/usuario.png">
+                </div>
+                
+                <div class="info-user">
+                    <h2 id="displayNombre">Nombre Completo</h2>
+                    <p class="label">Documento de Identidad</p>
+                    <p id="displayCedula" class="value">0000000000</p>
+                </div>
+            </div>
+            
+            <div class="carnet-footer">
+                <img src="./imagenes/logo.jpeg" id="logo-empresa" style="max-height: 150px;">
+                <p>Válido para acceso administrativo</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

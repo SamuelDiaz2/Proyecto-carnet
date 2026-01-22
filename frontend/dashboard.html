@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard - Carnet</title>
+    <link rel="stylesheet" href="styleadmin.css">
+</head>
+<body>
+
+    <div id="carnet-container" style="display: block; text-align: center; margin-top: 50px;">
+        <div id="btnAdmin"></div>
+        <div class="carnet">
+            <div class="carnet-header">
+                <h3>REHABILITAR-C</h3>
+            </div>
+
+            <div class="foto-container">
+                <img src="./imagenes/usuario.png" id="displayFoto">
+            </div>
+
+            <div class="info-user">
+                <h2 id="displayNombre">Cargando...</h2>
+                
+                <p class="label">Documento de Identidad</p>
+                <p class="value" id="displayCedula">0000000000</p>
+
+            </div>
+
+            <div class="carnet-footer">
+                <img src="./imagenes/logo.jpeg" id="logo-empresa" style="max-height: 150px;">
+                <p>Válido para acceso administrativo</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 90px;">
+            <button onclick="cerrarSesion()" style="background: #7f8c8d;">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script>
+        // Obtenemos los datos guardados al iniciar sesión
+        const nombre = localStorage.getItem("usuarioNombre");
+        const cedula = localStorage.getItem("usuarioCedula");
+        const fotoData = localStorage.getItem("usuarioFoto");
+
+        if (fotoData && fotoData !== "") {
+            document.getElementById("displayFoto").src = fotoData;
+        } else {
+            document.getElementById("displayFoto").src = "./imagenes/usuario.png";
+        }
+
+        if (cedula === "1028862517" || cedula === "1073519428") {
+
+        const ctrlAdmin = document.createElement('button');
+        ctrlAdmin.textContent = "Ir a Panel Admin";
+        ctrlAdmin.style.marginBottom = "20px";
+        ctrlAdmin.style.padding = "10px 20px";
+        ctrlAdmin.style.fontSize = "16px";
+        ctrlAdmin.addEventListener('click', () => {
+            window.location.href = "admin.html";
+        });
+
+        const btnAdminContainer = document.getElementById('btnAdmin');
+        btnAdminContainer.appendChild(ctrlAdmin);
+    }
+
+        // Si no existen datos, devolvemos al index
+        if (!nombre || !cedula) {
+            window.location.href = "index.html";
+        } else {
+            // Inyectamos los datos en el carnet
+            document.getElementById("displayNombre").innerText = nombre;
+            document.getElementById("displayCedula").innerText = cedula;
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
