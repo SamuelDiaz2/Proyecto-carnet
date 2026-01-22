@@ -19,32 +19,57 @@ const db = getFirestore(app);
 console.log("Firebase inicializado correctamente");
 
 document.getElementById('btnGuardar').addEventListener('click', async () => {
-    const cedula = document.getElementById('documentoInput').value;
+    // --- LÓGICA DE RESPALDO OFFLINE ---
+    const cedulaLocal = localStorage.getItem("usuarioCedula");
+    const nombreLocal = localStorage.getItem("usuarioNombre");
+
+    const cedula = document.getElementById('documentoInput').value.trim();
     const mensaje = document.getElementById('mensaje');
 
-    
-    
     if (!cedula) return alert("Por favor ingresa un número de documento");
 
-    try {
-        const docRef = doc(db, "autorizados", cedula);
-        const docSnap = await getDoc(docRef);
 
-        // Dentro de tu app.js, en el evento del botón de entrar
-        if (docSnap.exists()) {
-        const datos = docSnap.data();
-        localStorage.setItem("usuarioNombre", datos.nombre);
-        localStorage.setItem("usuarioCedula", cedula);
-        localStorage.setItem("usuarioFoto", datos.fotoUrl); // Guardamos el texto de la foto
-        window.location.href = "dashboard.html";
-    
-    } else {
-        mensaje.textContent = "No estás autorizado";
-        mensaje.style.color = "red";
-    }
+    try {
+        // Intentar consultar a Firebase solo si hay internet
+        if (navigator.onLine) {
+            const docRef = doc(db, "autorizados", cedula);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const datos = docSnap.data();
+                
+                // Guardamos/Actualizamos los datos locales para la próxima vez
+                localStorage.setItem("usuarioNombre", datos.nombre);
+                localStorage.setItem("usuarioCedula", cedula);
+                localStorage.setItem("usuarioFoto", datos.fotoUrl || ""); 
+                
+                window.location.href = "dashboard.html"; //
+                return; // Salimos de la función
+            } else {
+                mensaje.textContent = "No estás autorizado en el sistema";
+                mensaje.style.color = "red";
+                return;
+            }
+        } else {
+            // SI NO HAY INTERNET: Verificar si es el usuario guardado
+            if (cedula === cedulaLocal) {
+                window.location.href = "dashboard.html";
+                return;
+            } else {
+                throw new Error("Offline y usuario no coincide");
+            }
+        }
 
     } catch (error) {
         console.error("Error detallado:", error);
-        alert("Ocurrió un error al consultar los datos.");
+        
+        // Si hay un error (como falta de internet) pero la cédula coincide con la local
+        if (cedula === cedulaLocal && nombreLocal) {
+            console.log("Entrando en modo offline por error de red");
+            window.location.href = "dashboard.html";
+        } else {
+            mensaje.textContent = "Error de conexión. Verifica tu internet.";
+            mensaje.style.color = "orange";
+        }
     }
 });

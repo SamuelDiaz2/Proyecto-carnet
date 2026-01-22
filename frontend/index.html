@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        // Verificar si el usuario ya inició sesión
+        const nombreGuardado = localStorage.getItem("usuarioNombre");
+        const cedulaGuardada = localStorage.getItem("usuarioCedula");
+
+        if (nombreGuardado && cedulaGuardada) {
+            console.log("Usuario ya inició sesión, redirigiendo al dashboard...");
+            window.location.href = "dashboard.html";
+        }
+    </script>
 
     <div class="login-card">
         <h2>Iniciar Sesión</h2>
