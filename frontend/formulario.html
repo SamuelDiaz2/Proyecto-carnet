@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de cita medica</title>
+</head>
+<body>
+    <div>
+        <h2>Formulario de Cita Médica</h2>
+        <form>
+            <label for="horaInicial">Hora inicial:</label>
+            <input type="time">
+            <br>
+            <label for="nombre">Nombre del paciente:</label>
+            <input type="text">
+            <br>
+            <label for="documento">Documento de identidad:</label>
+            <br>
+            <input type="radio" name="documento" value="cc">C.C
+            <br>
+            <input type="radio" name="documento" value="ti">T.I
+            <br>
+            <input type="radio" name="documento" value="ce">C.E
+            <br>
+            <input type="radio" name="documento" value="pasaporte">Pasaporte
+            <br>
+            <input type="radio" name="documento" value="rc">R.C
+            <br>
+            <label for="numeroDocumento">Número de documento:</label>
+            <input type="text">
+            <br>
+            <label for="fechaNacimiento">Fecha de nacimiento:</label>
+            <input type="date">
+            <br>
+            <label for="ocupacion">ocupación:</label>
+            <input type="text">
+            <br>
+            <label for="motivoConsulta">Motivo de consulta:</label>
+            <input type="text">
+            <br>
+            <h2>Antecedentes</h2>
+            <label for="antecedentesPersonales">Antecedentes personales:</label>
+            <input type="text">
+            <br>
+            <label for="antecedentesFamiliares">Antecedentes farmacologicos:</label>
+            <input type="text">
+            <br>
+            <label for="antecedentesQuirurgicos">Quirurgicos:</label>
+            <input type="text">
+            <br>
+            <label for="antecedentesHospitalizacion">Hospitalizacion:</label>
+            <input type="text">
+            <br>
+            <label for="antecedentesAlergicos">Alergicos:</label>
+            <input type="text">
+            <br>
+            <label for="consumo">Consumo de tabaco/cigarrillo:</label>
+            <input type="radio" name="consumo" value="si">Si
+            <input type="radio" name="consumo" value="no">No
+            <br>
+            <label for="consumo de alcohol">Consumo de alcohol:</label>
+            <input type="radio" name="consumoAlcohol" value="si">Si
+            <input type="radio" name="consumoAlcohol" value="no">No
+            <input type="radio" name="consumoAlcohol" value="Socialmente">Socialmente
+            <br>
+            <label for="actividadfisica">Actividad física:</label>
+            <input type="radio" name="actividadFisica" value="si">Si
+            <input type="radio" name="actividadFisica" value="no">No
+            <br>
+            <label for="familiares">Familiares:</label>
+            <input type="text">
+            <br>
+            <h2>Signos vitales</h2>
+            <br>
+            <label for="FC">FC</label>
+            <input type="text">
+            <br>
+            <label for="FR">FR</label>
+            <input type="text">
+            <br>
+            <label for="SO2">SO2</label>
+            <input type="text">
+            <br>
+            <label for="TA">TA</label>
+            <input type="text">
+            <br>
+            <h2>Neurologica</h2>
+            <label for="estadoConciencia">Estado de conciencia:</label>
+            <br>
+            <input type="radio" name="estadoConciencia" value="alerta">Alerta
+            <br>
+            <input type="radio" name="estadoConciencia" value="somnoliento">Letargo/Somnoliento
+            <br>
+            <input type="radio" name="estadoConciencia" value="estuporoso">Obnibulacion
+            <br>
+            <input type="radio" name="documento" value="Estupo">Estupo
+            <br>
+            <input type="radio" name="estadoConciencia" value="coma">Coma
+            <br>
+            <label for="dolor">Dolor</label>
+            <br>
+            <label>Escala del 1 al 10:</label>
+            <input type="radio" name="dolor" value="1">1
+            <input type="radio" name="dolor" value="2">2
+            <input type="radio" name="dolor" value="3">3
+            <input type="radio" name="dolor" value="4">4
+            <input type="radio" name="dolor" value="5">5
+            <input type="radio" name="dolor" value="6">6
+            <input type="radio" name="dolor" value="7">7
+            <input type="radio" name="dolor" value="8">8
+            <input type="radio" name="dolor" value="9">9
+            <input type="radio" name="dolor" value="10">10
+            <br>
+            <label for="descripcion">Descripcion del dolor</label>
+            <input type="text">
+            <br>
+            <label for="sensibilidad">Sensibilidad:</label>
+            <br>
+            <input type="radio" name="sensibilidad" value="Anestesia">Anestesia
+            <input type="radio" name="sensibilidad" value="Hipoalgesia">Hipoalgesia
+            <input type="radio" name="sensibilidad" value="Normoalgesia">Normoalgesia
+            <input type="radio" name="sensibilidad" value="Hiperalgesia">Hiperalgesia
+            <br>
+            <h2>Sistema Cardiovascular</h2>
+            <label for="Edema">Edema:</label>
+            <br>
+            <label>grado</label>
+            <input type="radio" name="dolor" value="1">1
+            <input type="radio" name="dolor" value="2">2
+            <input type="radio" name="dolor" value="3">3
+            <input type="radio" name="dolor" value="4">4
+            <br>
+            <h2>Sistema musulo esqueletico</h2>
+            <label for="movilidadArticular">Movilidad articular:</label>
+            <table>
+                <tr>
+                    <th>Articulacion</th>
+                    <th>No aplica</th>
+                    <th>Leve</th>
+                    <th>Moderado</th>
+                    <th>Severo</th>
+                </tr>
+                <tr>
+                    <td>Columna cervical/cabeza y cuello</td>
+                    <td><input type="radio" name="ColumnaArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="ColumnaArticular" value="leve"></td>
+                    <td><input type="radio" name="ColumnaArticular" value="moderado"></td>
+                    <td><input type="radio" name="ColumnaArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Hombro</td>
+                    <td><input type="radio" name="hombroArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="hombroArticular" value="leve"></td>
+                    <td><input type="radio" name="hombroArticular" value="moderado"></td>
+                    <td><input type="radio" name="hombroArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Codo</td>
+                    <td><input type="radio" name="codoArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="codoArticular" value="leve"></td>
+                    <td><input type="radio" name="codoArticular" value="moderado"></td>
+                    <td><input type="radio" name="codoArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Muñeca</td>
+                    <td><input type="radio" name="munecaArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="munecaArticular" value="leve"></td>
+                    <td><input type="radio" name="munecaArticular" value="moderado"></td>
+                    <td><input type="radio" name="munecaArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Dedos de la mano</td>
+                    <td><input type="radio" name="dedosArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="dedosArticular" value="leve"></td>
+                    <td><input type="radio" name="dedosArticular" value="moderado"></td>
+                    <td><input type="radio" name="dedosArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Columna lumbar</td>
+                    <td><input type="radio" name="columnaLumbarArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="columnaLumbarArticular" value="leve"></td>
+                    <td><input type="radio" name="columnaLumbarArticular" value="moderado"></td>
+                    <td><input type="radio" name="columnaLumbarArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cadera</td>
+                    <td><input type="radio" name="caderaArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="caderaArticular" value="leve"></td>
+                    <td><input type="radio" name="caderaArticular" value="moderado"></td>
+                    <td><input type="radio" name="caderaArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Rodilla</td>
+                    <td><input type="radio" name="rodillaArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="rodillaArticular" value="leve"></td>
+                    <td><input type="radio" name="rodillaArticular" value="moderado"></td>
+                    <td><input type="radio" name="rodillaArticular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cuello de pie y dedos de pie</td>
+                    <td><input type="radio" name="tobilloArticular" value="NoAplica"></td>
+                    <td><input type="radio" name="tobilloArticular" value="leve"></td>
+                    <td><input type="radio" name="tobilloArticular" value="moderado"></td>
+                    <td><input type="radio" name="tobilloArticular" value="severo"></td>
+                </tr>
+            </table>
+            <br>
+            <label for="retraccionMuscular">Retracción muscular:</label>
+            <table>
+                <tr>
+                    <th>Articulacion</th>
+                    <th>No aplica</th>
+                    <th>Leve</th>
+                    <th>Moderado</th>
+                    <th>Severo</th>
+                </tr>
+                <tr>
+                    <td>Columna cervical/cabeza y cuello</td>
+                    <td><input type="radio" name="columnaMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="columnaMuscular" value="leve"></td>
+                    <td><input type="radio" name="columnaMuscular" value="moderado"></td>
+                    <td><input type="radio" name="columnaMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Hombro</td>
+                    <td><input type="radio" name="hombroMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="hombroMuscular" value="leve"></td>
+                    <td><input type="radio" name="hombroMuscular" value="moderado"></td>
+                    <td><input type="radio" name="hombroMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Codo</td>
+                    <td><input type="radio" name="codoMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="codoMuscular" value="leve"></td>
+                    <td><input type="radio" name="codoMuscular" value="moderado"></td>
+                    <td><input type="radio" name="codoMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Muñeca</td>
+                    <td><input type="radio" name="munecaMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="munecaMuscular" value="leve"></td>
+                    <td><input type="radio" name="munecaMuscular" value="moderado"></td>
+                    <td><input type="radio" name="munecaMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Dedos de la mano</td>
+                    <td><input type="radio" name="dedosMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="dedosMuscular" value="leve"></td>
+                    <td><input type="radio" name="dedosMuscular" value="moderado"></td>
+                    <td><input type="radio" name="dedosMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Columna lumbar</td>
+                    <td><input type="radio" name="columnaLumbarMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="columnaLumbarMuscular" value="leve"></td>
+                    <td><input type="radio" name="columnaLumbarMuscular" value="moderado"></td>
+                    <td><input type="radio" name="columnaLumbarMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cadera</td>
+                    <td><input type="radio" name="caderaMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="caderaMuscular" value="leve"></td>
+                    <td><input type="radio" name="caderaMuscular" value="moderado"></td>
+                    <td><input type="radio" name="caderaMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Rodilla</td>
+                    <td><input type="radio" name="rodillaMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="rodillaMuscular" value="leve"></td>
+                    <td><input type="radio" name="rodillaMuscular" value="moderado"></td>
+                    <td><input type="radio" name="rodillaMuscular" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cuello de pie y dedos de pie</td>
+                    <td><input type="radio" name="tobilloMuscular" value="NoAplica"></td>
+                    <td><input type="radio" name="tobilloMuscular" value="leve"></td>
+                    <td><input type="radio" name="tobilloMuscular" value="moderado"></td>
+                    <td><input type="radio" name="tobilloMuscular" value="severo"></td>
+                </tr>
+            </table>
+            <br>
+            <label for="Musculos">Musculos:</label>
+            <input type="text" id="Musculos" name="Musculos">
+            <br>
+            <label for="retraccionMuscular">Espasmo muscular:</label>
+            <table>
+                <tr>
+                    <th>Articulacion</th>
+                    <th>No aplica</th>
+                    <th>Leve</th>
+                    <th>Moderado</th>
+                    <th>Severo</th>
+                </tr>
+                <tr>
+                    <td>Columna cervical/cabeza y cuello</td>
+                    <td><input type="radio" name="columnaEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="columnaEspasmo" value="leve"></td>
+                    <td><input type="radio" name="columnaEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="columnaEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Hombro</td>
+                    <td><input type="radio" name="hombroEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="hombroEspasmo" value="leve"></td>
+                    <td><input type="radio" name="hombroEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="hombroEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Codo</td>
+                    <td><input type="radio" name="codoEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="codoEspasmo" value="leve"></td>
+                    <td><input type="radio" name="codoEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="codoEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Muñeca</td>
+                    <td><input type="radio" name="munecaEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="munecaEspasmo" value="leve"></td>
+                    <td><input type="radio" name="munecaEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="munecaEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Dedos de la mano</td>
+                    <td><input type="radio" name="dedosEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="dedosEspasmo" value="leve"></td>
+                    <td><input type="radio" name="dedosEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="dedosEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Columna lumbar</td>
+                    <td><input type="radio" name="columnaLumbarEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="columnaLumbarEspasmo" value="leve"></td>
+                    <td><input type="radio" name="columnaLumbarEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="columnaLumbarEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cadera</td>
+                    <td><input type="radio" name="caderaEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="caderaEspasmo" value="leve"></td>
+                    <td><input type="radio" name="caderaEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="caderaEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Rodilla</td>
+                    <td><input type="radio" name="rodillaEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="rodillaEspasmo" value="leve"></td>
+                    <td><input type="radio" name="rodillaEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="rodillaEspasmo" value="severo"></td>
+                </tr>
+                <tr>
+                    <td>Cuello de pie y dedos de pie</td>
+                    <td><input type="radio" name="tobilloEspasmo" value="NoAplica"></td>
+                    <td><input type="radio" name="tobilloEspasmo" value="leve"></td>
+                    <td><input type="radio" name="tobilloEspasmo" value="moderado"></td>
+                    <td><input type="radio" name="tobilloEspasmo" value="severo"></td>
+                </tr>
+            </table>
+            <label for="Musculos2">Musculos:</label>
+            <input type="text" id="Musculos" name="Musculos">
+            <br>
+            <label for="FuerzaMuscular">Fuerza muscular:</label>
+            <input type="text" id="FuerzaMuscular" name="FuerzaMuscular">
+            <br>
+            <label for="Otros">Otros:</label>
+            <input type="text" id="Otros" name="Otros">
+            <br>
+            <h2>Independencia y riesgo de caida</h2>
+            <label for="Escalada de barthel">Escala de Barthel:</label>
+            <table>
+                <tr>
+                    <th>Actividades</th>
+                    <th>0</th>
+                    <th>5</th>
+                    <th>10</th>
+                    <th>15</th>
+                </tr>
+                <tr>
+                    <td>Deambulacion</td>
+                    <td><input type="radio" name="Deambulacion" value="0"></td>
+                    <td><input type="radio" name="Deambulacion" value="5"></td>
+                    <td><input type="radio" name="Deambulacion" value="10"></td>
+                    <td><input type="radio" name="Deambulacion" value="15"></td>
+                </tr>
+                <tr>
+                    <td>Traslado cama/sillon</td>
+                    <td><input type="radio" name="Traslado" value="0"></td>
+                    <td><input type="radio" name="Traslado" value="5"></td>
+                    <td><input type="radio" name="Traslado" value="10"></td>
+                    <td><input type="radio" name="Traslado" value="15"></td>
+                </tr>
+                <tr>
+                    <td>Uso de escaleras</td>
+                    <td><input type="radio" name="usoEscaleras" value="0"></td>
+                    <td><input type="radio" name="usoEscaleras" value="5"></td>
+                    <td><input type="radio" name="usoEscaleras" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Ir al retrete</td>
+                    <td><input type="radio" name="iral" value="0"></td>
+                    <td><input type="radio" name="iral" value="5"></td>
+                    <td><input type="radio" name="iral" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Deposicion</td>
+                    <td><input type="radio" name="Deposicion" value="0"></td>
+                    <td><input type="radio" name="Deposicion" value="5"></td>
+                    <td><input type="radio" name="Deposicion" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Miccion</td>
+                    <td><input type="radio" name="Miccion" value="0"></td>
+                    <td><input type="radio" name="Miccion" value="5"></td>
+                    <td><input type="radio" name="Miccion" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Comer</td>
+                    <td><input type="radio" name="Comer" value="0"></td>
+                    <td><input type="radio" name="Comer" value="5"></td>
+                    <td><input type="radio" name="Comer" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Vestirse</td>
+                    <td><input type="radio" name="Vestirse" value="0"></td>
+                    <td><input type="radio" name="Vestirse" value="5"></td>
+                    <td><input type="radio" name="Vestirse" value="10"></td>
+                </tr>
+                <tr>
+                    <td>Bañarse</td>
+                    <td><input type="radio" name="Bañarse" value="0"></td>
+                    <td><input type="radio" name="Bañarse" value="5"></td>
+                </tr>
+                <tr>
+                    <td>Aseo personal/arreglarse</td>
+                    <td><input type="radio" name="Aseo" value="0"></td>
+                    <td><input type="radio" name="Aseo" value="5"></td>
+                </tr>
+            </table>
+            <br>
+            <label for="Puntuacion">Puntuacion y nivel de dependencia:</label>
+            <input type="text" id="Puntuacion" name="Puntuacion">
+            <br>
+            <label for="EscalaCrichton">Escala de Crichton</label>
+            <table>
+                <tr>
+                    <th>Actividades</th>
+                    <th>0</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                </tr>
+                <tr>
+                    <td>Limitacion fisica</td>
+                    <td><input type="radio" name="LimitacionFisica" value="0"></td>
+                    <td><input type="radio" name="LimitacionFisica" value="1"></td>
+                    <td><input type="radio" name="LimitacionFisica" value="2"></td>
+                    <td><input type="radio" name="LimitacionFisica" value="3"></td>
+                </tr>
+                <tr>
+                    <td>Estado mental alterado</td>
+                    <td><input type="radio" name="EstadoMentalAlterado" value="0"></td>
+                    <td><input type="radio" name="EstadoMentalAlterado" value="1"></td>
+                    <td><input type="radio" name="EstadoMentalAlterado" value="2"></td>
+                    <td><input type="radio" name="EstadoMentalAlterado" value="3"></td>
+                </tr>
+                <tr>
+                    <td>Tratamiento farmacologico que implica riesgo</td>
+                    <td><input type="radio" name="TratamientoFarmacologico" value="0"></td>
+                    <td><input type="radio" name="TratamientoFarmacologico" value="1"></td>
+                    <td><input type="radio" name="TratamientoFarmacologico" value="2"></td>
+                    <td><input type="radio" name="TratamientoFarmacologico" value="3"></td>
+                </tr>
+                <tr>
+                    <td>Problemas de idioma o socioculturales</td>
+                    <td><input type="radio" name="ProblemasIdiomaSocioculturales" value="0"></td>
+                    <td><input type="radio" name="ProblemasIdiomaSocioculturales" value="1"></td>
+                    <td><input type="radio" name="ProblemasIdiomaSocioculturales" value="2"></td>
+                    <td><input type="radio" name="ProblemasIdiomaSocioculturales" value="3"></td>
+                </tr>
+                <tr>
+                    <td>Problemas sin factores de riesgo evidente</td>
+                    <td><input type="radio" name="Problemas" value="0"></td>
+                    <td><input type="radio" name="Problemas" value="1"></td>
+                    <td><input type="radio" name="Problemas" value="2"></td>
+                    <td><input type="radio" name="Problemas" value="3"></td>
+                </tr>
+            </table>
+            <br>
+            <label for="Puntuacion">Puntuacion y nivel de riesgo</label>
+            <input type="text" id="Puntuacion" name="Puntuacion">
+            <br>
+            <h2>Objetivos y plan de tratamiento</h2>
+            <label for="#sesiones">Numero de sesiones requeridas o sugeridas aproximadamente</label>
+            <input type="text" id="sesiones" name="sesiones">
+            <br>
+            <label for="objetivos">Plan de tratamiento:</label>
+            <input type="text" id="tratamiento" name="tratamiento">
+            <br>
+            <label for="horaFinal">Hora final:</label>
+            <input type="time">
+        </form>
+    </div>
+</body>
+</html>
