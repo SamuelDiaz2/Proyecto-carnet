@@ -9,13 +9,13 @@
     <div>
         <h2>Formulario de Cita Médica</h2>
         <form>
-            <label for="horaInicial">Hora inicial:</label>
+            <label id="horaInicial">Hora inicial:</label>
             <input type="time">
             <br>
-            <label for="nombre">Nombre del paciente:</label>
+            <label id="nombre">Nombre del paciente:</label>
             <input type="text">
             <br>
-            <label for="documento">Documento de identidad:</label>
+            <label id="documento">Documento de identidad:</label>
             <br>
             <input type="radio" name="documento" value="cc">C.C
             <br>
@@ -27,66 +27,66 @@
             <br>
             <input type="radio" name="documento" value="rc">R.C
             <br>
-            <label for="numeroDocumento">Número de documento:</label>
+            <label id="numeroDocumento">Número de documento:</label>
             <input type="text">
             <br>
-            <label for="fechaNacimiento">Fecha de nacimiento:</label>
+            <label id="fechaNacimiento">Fecha de nacimiento:</label>
             <input type="date">
             <br>
-            <label for="ocupacion">ocupación:</label>
+            <label id="ocupacion">ocupación:</label>
             <input type="text">
             <br>
-            <label for="motivoConsulta">Motivo de consulta:</label>
+            <label id="motivoConsulta">Motivo de consulta:</label>
             <input type="text">
             <br>
             <h2>Antecedentes</h2>
-            <label for="antecedentesPersonales">Antecedentes personales:</label>
+            <label id="antecedentesPersonales">Antecedentes personales:</label>
             <input type="text">
             <br>
-            <label for="antecedentesFamiliares">Antecedentes farmacologicos:</label>
+            <label id="antecedentesFamiliares">Antecedentes farmacologicos:</label>
             <input type="text">
             <br>
-            <label for="antecedentesQuirurgicos">Quirurgicos:</label>
+            <label id="antecedentesQuirurgicos">Quirurgicos:</label>
             <input type="text">
             <br>
-            <label for="antecedentesHospitalizacion">Hospitalizacion:</label>
+            <label id="antecedentesHospitalizacion">Hospitalizacion:</label>
             <input type="text">
             <br>
-            <label for="antecedentesAlergicos">Alergicos:</label>
+            <label id="antecedentesAlergicos">Alergicos:</label>
             <input type="text">
             <br>
-            <label for="consumo">Consumo de tabaco/cigarrillo:</label>
+            <label id="consumo">Consumo de tabaco/cigarrillo:</label>
             <input type="radio" name="consumo" value="si">Si
             <input type="radio" name="consumo" value="no">No
             <br>
-            <label for="consumo de alcohol">Consumo de alcohol:</label>
+            <label id="consumo de alcohol">Consumo de alcohol:</label>
             <input type="radio" name="consumoAlcohol" value="si">Si
             <input type="radio" name="consumoAlcohol" value="no">No
             <input type="radio" name="consumoAlcohol" value="Socialmente">Socialmente
             <br>
-            <label for="actividadfisica">Actividad física:</label>
+            <label id="actividadfisica">Actividad física:</label>
             <input type="radio" name="actividadFisica" value="si">Si
             <input type="radio" name="actividadFisica" value="no">No
             <br>
-            <label for="familiares">Familiares:</label>
+            <label id="familiares">Familiares:</label>
             <input type="text">
             <br>
             <h2>Signos vitales</h2>
             <br>
-            <label for="FC">FC</label>
+            <label id="FC">FC</label>
             <input type="text">
             <br>
-            <label for="FR">FR</label>
+            <label id="FR">FR</label>
             <input type="text">
             <br>
-            <label for="SO2">SO2</label>
+            <label id="SO2">SO2</label>
             <input type="text">
             <br>
-            <label for="TA">TA</label>
+            <label id="TA">TA</label>
             <input type="text">
             <br>
             <h2>Neurologica</h2>
-            <label for="estadoConciencia">Estado de conciencia:</label>
+            <label id="estadoConciencia">Estado de conciencia:</label>
             <br>
             <input type="radio" name="estadoConciencia" value="alerta">Alerta
             <br>
@@ -98,9 +98,12 @@
             <br>
             <input type="radio" name="estadoConciencia" value="coma">Coma
             <br>
-            <label for="dolor">Dolor</label>
+            <label id="dolor">Dolor</label>
+            <br>
+            <img src="./imagenes/EscalaDolor.jpg" alt="foto de dolor">
             <br>
             <label>Escala del 1 al 10:</label>
+            <br>
             <input type="radio" name="dolor" value="1">1
             <input type="radio" name="dolor" value="2">2
             <input type="radio" name="dolor" value="3">3
@@ -112,10 +115,10 @@
             <input type="radio" name="dolor" value="9">9
             <input type="radio" name="dolor" value="10">10
             <br>
-            <label for="descripcion">Descripcion del dolor</label>
+            <label id="descripcion">Descripcion del dolor</label>
             <input type="text">
             <br>
-            <label for="sensibilidad">Sensibilidad:</label>
+            <label id="sensibilidad">Sensibilidad:</label>
             <br>
             <input type="radio" name="sensibilidad" value="Anestesia">Anestesia
             <input type="radio" name="sensibilidad" value="Hipoalgesia">Hipoalgesia
@@ -123,16 +126,18 @@
             <input type="radio" name="sensibilidad" value="Hiperalgesia">Hiperalgesia
             <br>
             <h2>Sistema Cardiovascular</h2>
-            <label for="Edema">Edema:</label>
+            <label id="Edema">Edema:</label>
+            <br>
+            <img src="./imagenes/edema.png" alt="foto de edema">
             <br>
             <label>grado</label>
-            <input type="radio" name="dolor" value="1">1
-            <input type="radio" name="dolor" value="2">2
-            <input type="radio" name="dolor" value="3">3
-            <input type="radio" name="dolor" value="4">4
+            <input type="radio" name="dolor1" value="1">1
+            <input type="radio" name="dolor2" value="2">2
+            <input type="radio" name="dolor3" value="3">3
+            <input type="radio" name="dolor4" value="4">4
             <br>
             <h2>Sistema musulo esqueletico</h2>
-            <label for="movilidadArticular">Movilidad articular:</label>
+            <label id="movilidadArticular">Movilidad articular:</label>
             <table>
                 <tr>
                     <th>Articulacion</th>
@@ -206,7 +211,7 @@
                 </tr>
             </table>
             <br>
-            <label for="retraccionMuscular">Retracción muscular:</label>
+            <label id="retraccionMuscular">Retracción muscular:</label>
             <table>
                 <tr>
                     <th>Articulacion</th>
@@ -280,10 +285,10 @@
                 </tr>
             </table>
             <br>
-            <label for="Musculos">Musculos:</label>
+            <label id="Musculos">Musculos:</label>
             <input type="text" id="Musculos" name="Musculos">
             <br>
-            <label for="retraccionMuscular">Espasmo muscular:</label>
+            <label id="retraccionMuscular">Espasmo muscular:</label>
             <table>
                 <tr>
                     <th>Articulacion</th>
@@ -356,17 +361,17 @@
                     <td><input type="radio" name="tobilloEspasmo" value="severo"></td>
                 </tr>
             </table>
-            <label for="Musculos2">Musculos:</label>
+            <label id="Musculos2">Musculos:</label>
             <input type="text" id="Musculos" name="Musculos">
             <br>
-            <label for="FuerzaMuscular">Fuerza muscular:</label>
+            <label id="FuerzaMuscular">Fuerza muscular:</label>
             <input type="text" id="FuerzaMuscular" name="FuerzaMuscular">
             <br>
-            <label for="Otros">Otros:</label>
+            <label id="Otros">Otros:</label>
             <input type="text" id="Otros" name="Otros">
             <br>
             <h2>Independencia y riesgo de caida</h2>
-            <label for="Escalada de barthel">Escala de Barthel:</label>
+            <label id="Escalada de barthel">Escala de Barthel:</label>
             <table>
                 <tr>
                     <th>Actividades</th>
@@ -437,10 +442,13 @@
                 </tr>
             </table>
             <br>
-            <label for="Puntuacion">Puntuacion y nivel de dependencia:</label>
+            <label id="Puntuacion">Puntuacion y nivel de riesgo:</label>
+            <br>
+            <img src="./imagenes/Riesgo.jpg" alt="foto de riesgo caida">
+            <br>
             <input type="text" id="Puntuacion" name="Puntuacion">
             <br>
-            <label for="EscalaCrichton">Escala de Crichton</label>
+            <label id="EscalaCrichton">Escala de Crichton</label>
             <table>
                 <tr>
                     <th>Actividades</th>
@@ -486,17 +494,17 @@
                 </tr>
             </table>
             <br>
-            <label for="Puntuacion">Puntuacion y nivel de riesgo</label>
+            <label id="Puntuacion">Puntuacion y nivel de riesgo</label>
             <input type="text" id="Puntuacion" name="Puntuacion">
             <br>
             <h2>Objetivos y plan de tratamiento</h2>
-            <label for="#sesiones">Numero de sesiones requeridas o sugeridas aproximadamente</label>
+            <label id="#sesiones">Numero de sesiones requeridas o sugeridas aproximadamente</label>
             <input type="text" id="sesiones" name="sesiones">
             <br>
-            <label for="objetivos">Plan de tratamiento:</label>
+            <label id="objetivos">Plan de tratamiento:</label>
             <input type="text" id="tratamiento" name="tratamiento">
             <br>
-            <label for="horaFinal">Hora final:</label>
+            <label id="horaFinal">Hora final:</label>
             <input type="time">
         </form>
     </div>
