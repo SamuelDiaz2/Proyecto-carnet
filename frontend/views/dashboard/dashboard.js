@@ -39,6 +39,7 @@ async function validarAcceso() {
             const docSnap = await getDoc(docRef);
 
             if (!docSnap.exists()) {
+
                 alert("Acceso denegado. Usuario no autorizado.");
                 cerrarSesion();
             } else {
@@ -86,6 +87,3 @@ async function init() {
         const btnCerrarSesionContainer = document.getElementById('options');
         btnCerrarSesionContainer.appendChild(CerrarSesionBtn);
 }
-
-verificarAdmin();
-init();

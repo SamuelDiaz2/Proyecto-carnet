@@ -26,7 +26,9 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
     const cedula = document.getElementById('documentoInput').value.trim();
     const mensaje = document.getElementById('mensaje');
 
-    if (!cedula) return alert("Por favor ingresa un número de documento");
+    if (!cedula) 
+        return mensaje.textContent = "Por favor ingresa número de documento",
+               mensaje.style.color = "red";
 
 
     try {
