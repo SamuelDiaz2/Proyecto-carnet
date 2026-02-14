@@ -43,7 +43,7 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
                 localStorage.setItem("usuarioCedula", cedula);
                 localStorage.setItem("usuarioFoto", datos.fotoUrl || ""); 
                 
-                window.location.href = "dashboard.html"; //
+                window.location.href = "/frontend/views/dashboard/dashboard.html"; //
                 return; // Salimos de la función
             } else {
                 mensaje.textContent = "No estás autorizado en el sistema";

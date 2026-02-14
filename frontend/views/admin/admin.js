@@ -41,7 +41,7 @@ document.getElementById('btnLogoutAdmin').addEventListener('click', () => {
 });
 
 document.getElementById('btnDashboard').addEventListener('click', () => {
-    window.location.href = "dashboard.html";
+    window.location.href = "/frontend/views/dashboard/dashboard.html";
 });
 
 onAuthStateChanged(auth, (user) => {
