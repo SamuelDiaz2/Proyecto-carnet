@@ -1,0 +1,485 @@
+/* ==========================================================================
+   Página de Pacientes e Historial de Citas
+   ========================================================================== */
+
+.pacientes-page-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 30px 15px 60px 15px;
+    box-sizing: border-box;
+}
+
+.pacientes-main-layout {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.pacientes-header {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.pacientes-header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+}
+
+.pacientes-header p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Controles de Búsqueda y Pestañas */
+.pacientes-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.search-bar-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 38px 12px 40px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #04b046;
+    box-shadow: 0 0 0 3px rgba(4, 176, 70, 0.15);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tab-filters {
+    display: flex;
+    gap: 10px;
+    background-color: #e2e8f0;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    background: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Grilla de Pacientes */
+.pacientes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.paciente-card-item {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.paciente-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-color: #04b046;
+}
+
+.paciente-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.paciente-avatar-initial {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #04b046 0%, #1982ea 100%);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.paciente-info-summary h3 {
+    margin: 0 0 2px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.paciente-doc-text {
+    margin: 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.paciente-meta-item {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #475569;
+}
+
+.paciente-stats-row {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0 14px 0;
+}
+
+.stat-badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+}
+
+.stat-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.stat-completed {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.btn-ver-historial {
+    width: 100%;
+    padding: 10px;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-historial:hover {
+    background-color: #e2e8f0;
+}
+
+/* Estados Vacío / Cargando / Error */
+.pacientes-state-box, .pacientes-empty-box {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    border-radius: 16px;
+    border: 1px dashed #cbd5e1;
+    text-align: center;
+    color: #64748b;
+}
+
+.pacientes-state-box.error {
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+/* ==========================================================================
+   Modal de Detalle del Paciente
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.modal-title-box h2 {
+    margin: 0;
+    font-size: 19px;
+    color: #1e293b;
+}
+
+.modal-title-box p {
+    margin: 4px 0 0 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.btn-close-modal:hover {
+    background-color: #e2e8f0;
+}
+
+.modal-body-scroll {
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.modal-patient-info {
+    background-color: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-patient-info p {
+    margin: 0;
+}
+
+.modal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.section-pending-title {
+    color: #b45309;
+}
+
+.section-completed-title {
+    color: #15803d;
+}
+
+.empty-subtext {
+    font-size: 13px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.citas-sublist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cita-detail-item {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pending-item {
+    border-left: 4px solid #f59e0b;
+}
+
+.completed-item {
+    border-left: 4px solid #10b981;
+    background-color: #fcfdfc;
+}
+
+.cita-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cita-service-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.status-pill {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pill.pendiente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-pill.confirmada {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.status-pill.completada {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.cita-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.cita-detail-grid p {
+    margin: 0;
+}
+
+.cita-detail-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.btn-action-complete {
+    flex: 1;
+    background-color: #04b046;
+    color: white;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-action-complete:hover {
+    background-color: #038f38;
+}
+
+.btn-action-assign {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-action-assign:hover {
+    background-color: #2563eb;
+}
+
+.modal-footer {
+    padding: 14px 24px;
+    border-top: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-close-modal-bottom {
+    background-color: #94a3b8;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
