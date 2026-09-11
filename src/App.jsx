@@ -22,15 +22,17 @@ function App() {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const cedulaGuardada = localStorage.getItem("usuarioCedula");
-    if (cedulaGuardada) {
+    const offline = localStorage.getItem('offline');
+    if (offline) {
       setSesionActiva(true);
+    } else {
+      setSesionActiva(false)
     }
     setCargando(false);
   }, []);
 
   if (cargando) {
-    return null; 
+    return null;
   }
 
   return (
@@ -39,9 +41,9 @@ function App() {
         <main className="main-content-area">
           <Suspense fallback={<PageLoader />}>
             <Routes>
-              <Route 
-                path="/" 
-                element={sesionActiva ? <Navigate to="/carnet" replace /> : <Login />} 
+              <Route
+                path="/"
+                element={sesionActiva ? <Navigate to="/carnet" replace /> : <Login />}
               />
               <Route path="/opciones" element={<Opciones />} />
               <Route path="/citas" element={<Citas />} />

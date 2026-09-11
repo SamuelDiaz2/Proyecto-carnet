@@ -19,6 +19,7 @@ function Login() {
         const pinLocal = localStorage.getItem("usuarioPin");
         const nombreLocal = localStorage.getItem("usuarioNombre");
 
+
         if (!cedulaTrimmed) {
             setMensaje({ texto: "Por favor ingresa número de documento", tipo: "error" });
             return;
@@ -48,9 +49,11 @@ function Login() {
                     localStorage.setItem("usuarioCedula", cedulaTrimmed);
                     localStorage.setItem("usuarioFoto", datos.fotoUrl || "");
                     localStorage.setItem("usuarioProfesion", datos.profesion || "");
+                    localStorage.setItem("offline", "false");
                     if (datos.pin) {
                         localStorage.setItem("usuarioPin", datos.pin);
                     }
+
 
                     navigate('/carnet');
                     return;
@@ -60,6 +63,8 @@ function Login() {
                 }
             } else {
                 // Modo offline: verificar coincidencia local de cédula y PIN
+                localStorage.setItem("offline", "true")
+
                 if (cedulaTrimmed === cedulaLocal) {
                     if (pinLocal && pinTrimmed !== pinLocal) {
                         setMensaje({ texto: "PIN incorrecto en modo offline", tipo: "error" });
