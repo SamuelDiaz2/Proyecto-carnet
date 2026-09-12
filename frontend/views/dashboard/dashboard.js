@@ -2,13 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCe_gy0izMEP21s0MB1U2PorT3fmnZsxCE",
-  authDomain: "carnet-9e498.firebaseapp.com",
-  projectId: "carnet-9e498",
-  storageBucket: "carnet-9e498.firebasestorage.app",
-  messagingSenderId: "199453995706",
-  appId: "1:199453995706:web:8eae4976cc2c4530b4c883",
-  measurementId: "G-KGTDX2LMR7"
+    apiKey: "AIzaSyCe_gy0izMEP21s0MB1U2PorT3fmnZsxCE",
+    authDomain: "carnet-9e498.firebaseapp.com",
+    projectId: "carnet-9e498",
+    storageBucket: "carnet-9e498.firebasestorage.app",
+    messagingSenderId: "199453995706",
+    appId: "1:199453995706:web:8eae4976cc2c4530b4c883",
+    measurementId: "G-KGTDX2LMR7"
 };
 
 // Initialize Firebase
@@ -64,10 +64,10 @@ async function verificarAdmin() {
     if (cedula === "1028862517" || cedula === "1073519428") {
 
         const ctrlAdmin = document.createElement('a');
-        ctrlAdmin.textContent = "Ir a Panel Admin";
+        ctrlAdmin.textContent = "Panel de Control";
         ctrlAdmin.style.cursor = "pointer";
         ctrlAdmin.addEventListener('click', () => {
-            window.location.href = "../admin/admin.html";
+            window.location.href = "../opciones/option.html";
         });
 
         const btnAdminContainer = document.getElementById('options');

@@ -146,7 +146,7 @@ document.getElementById('btnGuardar').addEventListener('click', async () => {
 
 // --- CARGAR LISTA ---
 function cargarListaUsuarios() {
-    // 1. Creamos la consulta ordenada por fecha (descendente para ver los nuevos arriba)
+    // 1. Consulta ordenada por fecha (descendente para ver los nuevos arriba)
     const q = query(collection(db, "autorizados"), orderBy("fecha", "desc"));
 
     onSnapshot(q, (snapshot) => {
@@ -157,14 +157,10 @@ function cargarListaUsuarios() {
         snapshot.forEach((docSnap) => {
             const u = docSnap.data();
             const row = document.createElement('tr');
-            
-            // Usamos una validación para la fecha como ya la tenías
-            const fechaFormateada = u.fecha ? u.fecha.toDate().toLocaleString() : "Sin fecha";
 
             row.innerHTML = `
                 <td>${docSnap.id}</td>
                 <td>${u.nombre}</td>
-                <td>${fechaFormateada}</td>
                 <td>
                     <button class="btn-eliminar"
                     data-id="${docSnap.id}" 

@@ -16,8 +16,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-console.log("Firebase inicializado correctamente");
-
 document.getElementById('btnGuardar').addEventListener('click', async () => {
     // --- LÓGICA DE RESPALDO OFFLINE ---
     const cedulaLocal = localStorage.getItem("usuarioCedula");
