@@ -1,0 +1,412 @@
+.professional-mobile-layout {
+    width: 100%;
+    max-width: 100%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+.login-panel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 16px;
+}
+
+/* Header adaptado a pantallas pequeñas */
+.professional-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+}
+
+.professional-header h1 {
+    font-size: 22px;
+    margin: 0;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.professional-header p {
+    font-size: 13px;
+    margin: 4px 0 0 0;
+    color: #64748b;
+}
+
+
+.btn-logout-top {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-logout-top:hover {
+    background-color: #dc2626;
+}
+
+.btn-back-top {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-back-top:hover {
+    background-color: #2563eb;
+}
+
+.professional-content-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.admin-card-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-card-section h2 {
+    font-size: 16px;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+}
+
+.centered-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Formulario e Inputs */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.admin-form-group label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.admin-form-group input,
+.admin-form-group select {
+    padding: 12px;
+    border: 1.5px solid #00000041;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background-color: #f8fafc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-form-group input:focus,
+.admin-form-group select:focus {
+    border-color: #0099a8;
+    background-color: #fff;
+}
+
+.btn-admin-submit {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+.form-message {
+    font-size: 13px;
+    text-align: center;
+    margin: 0;
+}
+
+.exclusive-badge-card {
+    width: 100%;
+    max-width: 310px;
+    /* Tamaño responsivo límite del carnet */
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    padding-bottom: 18px;
+    margin: 10px 0;
+}
+
+.exclusive-badge-gradient {
+    background: linear-gradient(135deg, #04b046 0%, #1982ea 100%);
+    padding: 24px 16px 48px 16px;
+}
+
+.exclusive-company-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.exclusive-avatar-frame {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: -60px auto 0 auto;
+    border: 5px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exclusive-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.exclusive-badge-details {
+    padding: 16px 20px 5px 20px;
+}
+
+.exclusive-user-fullname {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+.exclusive-user-profession {
+    font-size: 12px;
+    font-weight: 600;
+    color: #04b046;
+    margin: 0 0 10px 0;
+}
+
+.profession-tag {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.exclusive-doc-label {
+    font-size: 10px;
+    color: #94a3b8;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.exclusive-doc-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0076df;
+    margin: 0 0 10px 0;
+}
+
+.exclusive-badge-footer {
+    border-top: 1px dashed #cbd5e1;
+    margin-top: 8px;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.exclusive-footer-logo {
+    width: 120px;
+    height: auto;
+}
+
+.exclusive-footer-text {
+    font-size: 9px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.table-vertical-scroll {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* En teléfonos, convertimos la tabla en bloques legibles verticales */
+@media (max-width: 500px) {
+    .admin-table thead {
+        display: none;
+    }
+
+    /* Oculta títulos de columna rígidos */
+    .admin-table tr {
+        display: flex;
+        flex-direction: column;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .admin-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 13px;
+        border: none;
+    }
+
+    .admin-table td::before {
+        content: attr(data-label);
+        /* Usa el label del JSX como título lateral */
+        font-weight: 700;
+        color: #64748b;
+    }
+}
+
+/* Estilos estándar para pantallas medianas o PC */
+@media (min-width: 501px) {
+    .admin-table th {
+        position: sticky;
+        top: 0;
+        background: #f8fafc;
+        padding: 12px;
+        font-size: 13px;
+        color: #64748b;
+        text-align: left;
+        box-shadow: inset 0 -1px 0 #e2e8f0;
+    }
+
+    .admin-table td {
+        padding: 12px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+    }
+}
+
+.table-doc {
+    font-weight: 700;
+    color: #4f46e5;
+}
+
+.btn-table-delete {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.confirm-delete-box {
+    background-color: #fef2f2;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #fee2e2;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-yes {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-no {
+    background-color: #94a3b8;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   5. ESCALADO DE DISEÑO PARA PANTALLAS GRANDES (PC / TABLETS)
+   ========================================================================== */
+@media (min-width: 768px) {
+    .professional-mobile-layout {
+        max-width: 900px;
+        /* Se expande un poco más en escritorio */
+        padding: 30px;
+    }
+
+    .professional-header h1 {
+        font-size: 26px;
+    }
+
+    /* En PC los inputs se alinean uno al lado del otro */
+    .admin-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .admin-form .btn-admin-submit,
+    .admin-form .form-message {
+        grid-column: span 2;
+        /* El botón ocupa todo el ancho inferior */
+    }
+}

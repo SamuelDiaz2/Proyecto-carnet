@@ -1,0 +1,234 @@
+.citas-section {
+    padding: 30px 15px;
+    background-color: #f8f9fa;
+    min-height: 80vh;
+}
+
+.citas-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.citas-container h2 {
+    text-align: center;
+    color: #1a252f;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+/* Barra y Distintivo de Especialidad */
+.filtro-profesion-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.filtro-profesion-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.filtro-profesion-pill .filtro-label {
+    color: #047857;
+    font-weight: 500;
+}
+
+.filtro-profesion-pill .filtro-valor {
+    color: #064e3b;
+    font-weight: 700;
+}
+
+.filtro-profesion-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filtro-profesion-admin label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.filtro-profesion-admin select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #94a3b8;
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+.filtro-profesion-admin select:focus {
+    border-color: #04b046;
+}
+
+/* Grilla responsive de tarjetas */
+.citas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.cita-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid #e1e8ed;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cita-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.cita-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Badges para el estado de la cita */
+.cita-estado {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+}
+
+.cita-estado.pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.cita-estado.confirmada {
+    background-color: #cfe2ff;
+    color: #0a58ca;
+}
+
+.cita-estado.completada, .cita-estado.pagado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.cita-estado.cancelada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.cita-precio {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 0.95rem;
+}
+
+.cita-body h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.cita-body p {
+    margin: 6px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Estados Vacío / Cargando / Error */
+.citas-state, .citas-empty {
+    text-align: center;
+    padding: 40px 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    color: #666;
+    border: 1px dashed #ccc;
+}
+
+.citas-state.error {
+    color: #dc3545;
+    border-color: #f5c6cb;
+}
+
+.btn-reintentar {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Spinner animado */
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px auto;
+}
+
+.btn-seleccionar {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #04b046;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-seleccionar:hover {
+    background-color: #038f38;
+}
+
+.btn-seleccionar:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-seleccionar.btn-asignado-propio {
+    background-color: #0284c7;
+}
+
+.btn-seleccionar.btn-asignado-propio:hover {
+    background-color: #0369a1;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
