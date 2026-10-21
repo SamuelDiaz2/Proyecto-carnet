@@ -1,6 +1,6 @@
 {
   "appId": "com.CarnetRehabilitarC.app",
   "appName": "Rehabilitar-C",
-  "webDir": "frontend",
+  "webDir": "dist",
   "bundleWebRuntime": false
 }

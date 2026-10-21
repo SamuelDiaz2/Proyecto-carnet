@@ -49,7 +49,7 @@ function Login() {
                     localStorage.setItem("usuarioCedula", cedulaTrimmed);
                     localStorage.setItem("usuarioFoto", datos.fotoUrl || "");
                     localStorage.setItem("usuarioProfesion", datos.profesion || "");
-                    localStorage.setItem("offline", "false");
+                    localStorage.setItem("sesion", "false");
                     if (datos.pin) {
                         localStorage.setItem("usuarioPin", datos.pin);
                     }
@@ -63,7 +63,7 @@ function Login() {
                 }
             } else {
                 // Modo offline: verificar coincidencia local de cédula y PIN
-                localStorage.setItem("offline", "true")
+                localStorage.setItem("sesion", "true")
 
                 if (cedulaTrimmed === cedulaLocal) {
                     if (pinLocal && pinTrimmed !== pinLocal) {

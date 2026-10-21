@@ -3,12 +3,13 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { db } from '../../lib/firebaseConfig.js';
 import { doc, getDoc } from 'firebase/firestore';
 import SideMenu from '../../components/side-menu/side-menu.jsx';
-import { coincideProfesionCita, LISTA_PROFESIONES } from '../../utils/filterServices.js';
+import { coincideProfesionCita } from '../../utils/filterServices.js';
 import './citas.css';
 
 function CitasProfesional() {
     const [citas, setCitas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cargandoPerfil, setCargandoPerfil] = useState(false);
     const [error, setError] = useState(null);
     const [actualizandoId, setActualizandoId] = useState(null);
     const [menuAbierto, setMenuAbierto] = useState(false);
@@ -16,44 +17,45 @@ function CitasProfesional() {
     const [profesionUsuario, setProfesionUsuario] = useState(localStorage.getItem("usuarioProfesion") || "");
     const nombreProfesional = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
     const cedulaUsuario = localStorage.getItem("usuarioCedula") || "";
-    const esAdmin = cedulaUsuario === "1028862517" || cedulaUsuario === "1073519428";
-
-    const [filtroAdmin, setFiltroAdmin] = useState('todos');
 
     useEffect(() => {
-        // En caso de que la profesión no estuviera en localStorage, intentar cargarla desde Firestore
-        const cargarProfesion = async () => {
-            if (!profesionUsuario && cedulaUsuario) {
+        const iniciarCarga = async () => {
+            let prof = profesionUsuario;
+
+            // Si no está en localStorage, se consulta en Firestore
+            if (!prof && cedulaUsuario) {
                 try {
+                    setCargandoPerfil(true);
                     const snap = await getDoc(doc(db, "autorizados", cedulaUsuario));
                     if (snap.exists() && snap.data().profesion) {
-                        const prof = snap.data().profesion;
+                        prof = snap.data().profesion;
                         setProfesionUsuario(prof);
                         localStorage.setItem("usuarioProfesion", prof);
                     }
                 } catch (e) {
                     console.error("Error al cargar profesión desde Firestore:", e);
+                } finally {
+                    setCargandoPerfil(false);
                 }
             }
+
+            await obtenerCitas();
         };
 
-        cargarProfesion();
-        obtenerCitasProfesional();
-    }, [cedulaUsuario, profesionUsuario]);
+        iniciarCarga();
+    }, [cedulaUsuario]);
 
-    const obtenerCitasProfesional = async () => {
+    const obtenerCitas = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const { data, error: err } = await supabase
+            const { data, err } = await supabase
                 .from('citas')
                 .select('*')
                 .order('fecha', { ascending: true });
 
-            if (err) {
-                throw err;
-            }
+            if (err) throw err;
 
             setCitas(data || []);
         } catch (err) {
@@ -68,7 +70,6 @@ function CitasProfesional() {
         try {
             setActualizandoId(citaId);
 
-            // Actualizar la columna 'profesional' en la tabla 'citas' de Supabase
             const { error: updateError } = await supabase
                 .from('citas')
                 .update({
@@ -79,7 +80,7 @@ function CitasProfesional() {
 
             if (updateError) throw updateError;
 
-            // Actualizamos el estado local para mostrar el cambio en la pantalla sin recargar
+            // Actualización local en estado
             setCitas(prevCitas =>
                 prevCitas.map(cita =>
                     cita.id === citaId ? { ...cita, profesional: nombreProfesional, estado: 'confirmada' } : cita
@@ -93,28 +94,17 @@ function CitasProfesional() {
         }
     };
 
-    // Filtrar citas según la profesión del profesional o el filtro de administrador
-    const citasFiltradas = useMemo(() => {
-        return citas.filter(cita => {
-            // Citas ya asignadas a este profesional siempre se muestran
-            if (nombreProfesional && cita.profesional === nombreProfesional) {
-                return true;
-            }
+    // Filtro estricto automático: solo pasan citas que coinciden con la profesión del usuario
+    const citasEspecialidad = useMemo(() => {
+        if (!profesionUsuario) return [];
+        return citas.filter(cita => coincideProfesionCita(cita, profesionUsuario));
+    }, [citas, profesionUsuario]);
 
-            // Administrador: puede ver todas o filtrar por especialidad
-            if (esAdmin) {
-                if (filtroAdmin === 'todos') return true;
-                return coincideProfesionCita(cita, filtroAdmin);
-            }
-
-            // Profesional: solo ve citas de su especialidad
-            return coincideProfesionCita(cita, profesionUsuario);
-        });
-    }, [citas, nombreProfesional, esAdmin, filtroAdmin, profesionUsuario]);
+    const isLoadingTotal = loading || cargandoPerfil;
 
     return (
         <section className="citas-section">
-            {/* Botón hamburguesa */}
+            {/* Botón menú hamburguesa */}
             <button className="hamburger-btn" onClick={() => setMenuAbierto(!menuAbierto)} aria-label="Abrir menú">
                 {menuAbierto ? '✕' : '☰'}
             </button>
@@ -126,62 +116,31 @@ function CitasProfesional() {
             </div>
 
             <div className="citas-container">
-                <h2>Citas Asignadas / Agendadas</h2>
+                <h2>Citas de {profesionUsuario || 'Especialidad'}</h2>
 
-                {/* Filtro / Indicador de Especialidad */}
-                <div className="filtro-profesion-wrapper">
-                    {esAdmin ? (
-                        <div className="filtro-profesion-admin">
-                            <label htmlFor="filtro-admin">Filtrar por Especialidad:</label>
-                            <select
-                                id="filtro-admin"
-                                value={filtroAdmin}
-                                onChange={(e) => setFiltroAdmin(e.target.value)}
-                            >
-                                <option value="todos">Todas las Especialidades ({citas.length})</option>
-                                {LISTA_PROFESIONES.map((prof) => (
-                                    <option key={prof} value={prof}>{prof}</option>
-                                ))}
-                            </select>
-                        </div>
-                    ) : (
-                        <div className="filtro-profesion-pill">
-                            <span className="filtro-icon">🩺</span>
-                            <span className="filtro-label">Especialidad:</span>
-                            <span className="filtro-valor">{profesionUsuario || 'General'}</span>
-                        </div>
-                    )}
-                </div>
-
-                {loading && (
+                {isLoadingTotal && (
                     <div className="citas-state">
                         <div className="spinner"></div>
-                        <p>Cargando lista de citas...</p>
+                        <p>Cargando citas de {profesionUsuario || 'tu especialidad'}...</p>
                     </div>
                 )}
 
                 {error && (
                     <div className="citas-state error">
                         <p>{error}</p>
-                        <button onClick={obtenerCitasProfesional} className="btn-reintentar">Reintentar</button>
+                        <button onClick={obtenerCitas} className="btn-reintentar">Reintentar</button>
                     </div>
                 )}
 
-                {!loading && !error && citasFiltradas.length === 0 && (
+                {!isLoadingTotal && !error && citasEspecialidad.length === 0 && (
                     <div className="citas-empty">
-                        <p>
-                            {esAdmin && filtroAdmin !== 'todos'
-                                ? `No hay citas para la especialidad "${filtroAdmin}".`
-                                : profesionUsuario
-                                ? `No hay citas disponibles para tu especialidad (${profesionUsuario}) en este momento.`
-                                : 'No hay citas programadas en este momento.'}
-                        </p>
+                        <p>No hay citas registradas para {profesionUsuario || 'tu especialidad'} en este momento.</p>
                     </div>
                 )}
 
-                {!loading && !error && citasFiltradas.length > 0 && (
+                {!isLoadingTotal && !error && citasEspecialidad.length > 0 && (
                     <div className="citas-grid">
-                        {citasFiltradas.map((cita) => (
+                        {citasEspecialidad.map((cita) => (
                             <div key={cita.id} className="cita-card">
                                 <div className="cita-header">
                                     <span className={`cita-estado ${cita.estado?.toLowerCase() || 'pendiente'}`}>
@@ -229,7 +188,7 @@ function CitasProfesional() {
 
                                     {cita.profesional && (
                                         <p className="cita-profesional">
-                                            <strong>Profesional:</strong> {cita.profesional}
+                                            <strong>Profesional Asignado:</strong> {cita.profesional}
                                         </p>
                                     )}
 
@@ -260,7 +219,7 @@ function CitasProfesional() {
                                                 : cita.profesional === nombreProfesional
                                                     ? '✓ Asignado a Ti'
                                                     : cita.profesional
-                                                        ? 'Asignar Paciente (Reasignar)'
+                                                        ? 'Reasignar Paciente'
                                                         : 'Asignar Paciente'
                                             }
                                         </button>

@@ -12,7 +12,7 @@ const SideMenu = () => {
 
     // Función para limpiar el localStorage y salir de la aplicación
     const handleLogout = () => {
-        localStorage.removeItem('offline');
+        localStorage.removeItem('sesion');
         navigate('/');
     };
 

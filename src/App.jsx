@@ -9,6 +9,7 @@ const Opciones = lazy(() => import('./pages/opciones/opciones.jsx'));
 const Profesional = lazy(() => import('./pages/profesional/profesional.jsx'));
 const Citas = lazy(() => import('./pages/citas/citas.jsx'));
 const Paciente = lazy(() => import('./pages/paciente/paciente.jsx'));
+const Registro = lazy(() => import('./pages/registro/registro.jsx'));
 
 // Fallback de carga liviano
 const PageLoader = () => (
@@ -22,8 +23,8 @@ function App() {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const offline = localStorage.getItem('offline');
-    if (offline) {
+    const sesion = localStorage.getItem('sesion');
+    if (sesion) {
       setSesionActiva(true);
     } else {
       setSesionActiva(false)
@@ -50,6 +51,7 @@ function App() {
               <Route path="/carnet" element={<CarnetDigital />} />
               <Route path="/profesional" element={<Profesional />} />
               <Route path="/paciente" element={<Paciente />} />
+              <Route path="/registro" element={<Registro />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
