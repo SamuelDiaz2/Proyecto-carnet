@@ -219,7 +219,6 @@ function Registro() {
                         <label className="input-label">Servicio Requerido:</label>
                         <select value={servicio} onChange={(e) => setServicio(e.target.value)} className="select-pill">
                             <option value="Psicologia">Psicología</option>
-                            <option value="Hidroterapia">Hidroterapia</option>
                             <option value="Terapia Fisica">Terapia Física</option>
                             <option value="Terapia Respiratoria">Terapia Respiratoria</option>
                             <option value="Terapia Ocupacional">Terapia Ocupacional</option>

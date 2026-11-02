@@ -1,0 +1,1197 @@
+{
+    "servicio": {
+        "fonoaudiologia": [
+            {
+                "titulo": "Anamnesis",
+                "campos": [
+                    {
+                        "id": "hora_inicial",
+                        "label": "Hora inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "nombre_paciente",
+                        "label": "Nombre del paciente",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tipo_identificacion",
+                        "label": "Tipo de identificación",
+                        "tipo": "select",
+                        "opciones": [
+                            "C.C",
+                            "T.I",
+                            "C.E",
+                            "R.C"
+                        ]
+                    },
+                    {
+                        "id": "numero_identificacion",
+                        "label": "Número de identificación",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "fecha_nacimiento",
+                        "label": "Fecha de nacimiento",
+                        "tipo": "date"
+                    },
+                    {
+                        "id": "ocupacion",
+                        "label": "Ocupación",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "motivo_consulta",
+                        "label": "Motivo de consulta",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Antecedentes",
+                "campos": [
+                    {
+                        "id": "ant_personales",
+                        "label": "Personales",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "ant_farmacologicos",
+                        "label": "Farmacológicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "ant_quirurgicos",
+                        "label": "Quirúrgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "ant_hospitalizacion",
+                        "label": "Hospitalización",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "ant_alergicos",
+                        "label": "Alérgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "ant_tabaco",
+                        "label": "Consumo de tabaco/cigarrillo",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "ant_alcohol",
+                        "label": "Consumo de alcohol",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "ant_actividad_fisica",
+                        "label": "Actividad física",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "ant_familiares",
+                        "label": "Familiares",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Neurológica",
+                "campos": [
+                    {
+                        "id": "estado_conciencia",
+                        "label": "Estado de conciencia",
+                        "tipo": "select",
+                        "opciones": [
+                            "Alerta",
+                            "Somnoliento",
+                            "Confundido",
+                            "Letárgico",
+                            "Comatoso"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "Procesos Motores Básicos del Habla",
+                "campos": [
+                    {
+                        "id": "nariz",
+                        "label": "Nariz",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "labios_posicion",
+                        "label": "Labios - Posición",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "labios_tonicidad",
+                        "label": "Labios - Tonicidad",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "labios_superiores",
+                        "label": "Labios superiores",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "labios_inferiores",
+                        "label": "Labios inferiores",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "frenillo_labial_superior",
+                        "label": "Frenillo labial superior",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "frenillo_labial_inferior",
+                        "label": "Frenillo labial inferior",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "lengua_posicion",
+                        "label": "Posición de la lengua",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "lengua_tamano",
+                        "label": "Tamaño de la lengua",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "lengua_fuerza",
+                        "label": "Fuerza de la lengua",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "lengua_frenillo",
+                        "label": "Frenillo lingual",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "paladar_oseo",
+                        "label": "Paladar óseo",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "velo_paladar",
+                        "label": "Velo del paladar",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "uvula",
+                        "label": "Úvula",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "amigdalas",
+                        "label": "Amígdalas",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "maxilares_oclusion",
+                        "label": "Oclusión maxilares",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "maxilares_inferiores",
+                        "label": "Maxilares inferiores",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "dientes_tipo_detencion",
+                        "label": "Tipo de detención dental",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "dientes_estado",
+                        "label": "Estado dental",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "respiracion_tipo",
+                        "label": "Tipo de respiración",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "respiracion_modo",
+                        "label": "Modo de respiración",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "coordinacion_fonorespiratoria",
+                        "label": "Coordinación fonorespiratoria",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "praxias_labiales",
+                        "label": "Praxias labiales",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "praxias_linguales",
+                        "label": "Praxias linguales",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "praxias_faciales",
+                        "label": "Praxias faciales",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "caracteristicas_habla",
+                        "label": "Características del habla",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Fonemas Bilaterales",
+                "campos": [
+                    {
+                        "id": "tar_bilateral_inicial",
+                        "label": "Posición Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_bilateral_media",
+                        "label": "Posición Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_bilateral_final",
+                        "label": "Posición Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Labiodentales",
+                "campos": [
+                    {
+                        "id": "tar_labiodental_inicial",
+                        "label": "Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_labiodental_media",
+                        "label": "Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_labiodental_final",
+                        "label": "Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Dentales",
+                "campos": [
+                    {
+                        "id": "tar_dental_inicial",
+                        "label": "Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_dental_media",
+                        "label": "Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_dental_final",
+                        "label": "Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Alveolares",
+                "campos": [
+                    {
+                        "id": "tar_alveolar_inicial",
+                        "label": "Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_alveolar_media",
+                        "label": "Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_alveolar_final",
+                        "label": "Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Palatales",
+                "campos": [
+                    {
+                        "id": "tar_palatal_inicial",
+                        "label": "Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_palatal_media",
+                        "label": "Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_palatal_final",
+                        "label": "Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Velares",
+                "campos": [
+                    {
+                        "id": "tar_velar_inicial",
+                        "label": "Inicial (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_velar_media",
+                        "label": "Media (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    },
+                    {
+                        "id": "tar_velar_final",
+                        "label": "Final (1 a 5)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "T.A.R. (Test de Articulación por Repetición) - Fonemas y Estructuras Avanzadas",
+                "campos": [
+                    {
+                        "id": "tar_difonos_vocalicos",
+                        "label": "Dífonos vocálicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tar_difonos_consonanticos",
+                        "label": "Dífonos consonánticos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tar_palabras_polisilabicas",
+                        "label": "Palabras polisilábicas",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tar_frases",
+                        "label": "Frases",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Memoria auditiva",
+                "campos": [
+                    {
+                        "id": "memoria_auditiva",
+                        "label": "Memoria auditiva",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Objetivos y plan de tratamiento",
+                "campos": [
+                    {
+                        "id": "numero_sesiones_requeridas",
+                        "label": "Número de sesiones requeridas o sugeridas aproximadamente",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "plan_tratamiento",
+                        "label": "Plan de tratamiento",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ],
+        "terapia_fisica": [
+            {
+                "titulo": "Anamnesis - Terapia Física",
+                "campos": [
+                    {
+                        "id": "tf_hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "tf_nombre_paciente",
+                        "label": "Nombre del paciente",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_tipo_identificacion",
+                        "label": "Tipo de identificación",
+                        "tipo": "select",
+                        "opciones": [
+                            "RC",
+                            "TI",
+                            "CC",
+                            "CE",
+                            "Pasaporte"
+                        ]
+                    },
+                    {
+                        "id": "tf_numero_identificacion",
+                        "label": "Número de identificación",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "tf_fecha_nacimiento",
+                        "label": "Fecha de nacimiento",
+                        "tipo": "date"
+                    },
+                    {
+                        "id": "tf_ocupacion",
+                        "label": "Ocupación",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_motivo_consulta",
+                        "label": "Motivo de consulta",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Antecedentes",
+                "campos": [
+                    {
+                        "id": "tf_ant_personales",
+                        "label": "Personales",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_ant_farmacologicos",
+                        "label": "Farmacológicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_ant_quirurgicos",
+                        "label": "Quirúrgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_ant_hospitalizacion",
+                        "label": "Hospitalización",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_ant_alergicos",
+                        "label": "Alérgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_ant_tabaco",
+                        "label": "Consumo de tabaco/cigarrillo",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No"
+                        ]
+                    },
+                    {
+                        "id": "tf_ant_alcohol",
+                        "label": "Consumo de alcohol",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Socialmente"
+                        ]
+                    },
+                    {
+                        "id": "tf_ant_actividad_fisica",
+                        "label": "Actividad física",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No"
+                        ]
+                    },
+                    {
+                        "id": "tf_ant_familiares",
+                        "label": "Familiares",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Signos Vitales",
+                "campos": [
+                    {
+                        "id": "tf_fc",
+                        "label": "FC (Frecuencia Cardíaca)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_fr",
+                        "label": "FR (Frecuencia Respiratoria)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_so2",
+                        "label": "SO2 (Saturación de Oxígeno)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_ta",
+                        "label": "TA (Tensión Arterial)",
+                        "tipo": "text"
+                    }
+                ]
+            },
+            {
+                "titulo": "Neurológica",
+                "campos": [
+                    {
+                        "id": "tf_estado_conciencia",
+                        "label": "Estado de conciencia",
+                        "tipo": "select",
+                        "opciones": [
+                            "Alerta",
+                            "Letargo / somnolencia",
+                            "Obnubilación",
+                            "Estupor",
+                            "Coma"
+                        ]
+                    },
+                    {
+                        "id": "tf_escala_dolor",
+                        "label": "Escala de Dolor (0 al 10)",
+                        "tipo": "select",
+                        "opciones": [
+                            "0 - No dolor",
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "6",
+                            "7",
+                            "8",
+                            "9",
+                            "10"
+                        ]
+                    },
+                    {
+                        "id": "tf_descripcion_dolor",
+                        "label": "Descripción del dolor",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_sensibilidad",
+                        "label": "Sensibilidad (Clasificación)",
+                        "tipo": "select",
+                        "opciones": [
+                            "Anestesia",
+                            "Hipoalgesia",
+                            "Normoalgesia",
+                            "Hiperalgesia"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "Sistema Cardiovascular",
+                "campos": [
+                    {
+                        "id": "tf_edema_grado",
+                        "label": "Edema (Grado 1 a 4)",
+                        "tipo": "select",
+                        "opciones": [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                        ]
+                    },
+                    {
+                        "id": "tf_inflamacion",
+                        "label": "Inflamación",
+                        "tipo": "text"
+                    }
+                ]
+            },
+            {
+                "titulo": "Sistema Músculo Esquelético",
+                "campos": [
+                    {
+                        "id": "tf_movilidad_articular",
+                        "label": "Movilidad articular (Evaluación por segmentos corporales)",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_retraccion_muscular",
+                        "label": "Retracción muscular",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_musculos",
+                        "label": "Músculos",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_espasmo_muscular",
+                        "label": "Espasmo muscular",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_fuerza_muscular",
+                        "label": "Fuerza muscular",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_otros_musculo",
+                        "label": "Otros (postura, agarres, propiocepción, marcha, equilibrio)",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Independencia y Riesgo de Caída",
+                "campos": [
+                    {
+                        "id": "tf_escala_barthel",
+                        "label": "Escala de Barthel (Puntuación y nivel de dependencia)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tf_escala_crichton",
+                        "label": "Escala de Crichton (Puntuación y nivel de riesgo)",
+                        "tipo": "text"
+                    }
+                ]
+            },
+            {
+                "titulo": "Objetivos y Plan de Tratamiento",
+                "campos": [
+                    {
+                        "id": "tf_num_sesiones",
+                        "label": "Número de sesiones requeridas o sugeridas aproximadamente",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "tf_plan_tratamiento",
+                        "label": "Plan de tratamiento",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tf_hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ],
+        "terapia_respiratoria": [
+            {
+                "titulo": "Anamnesis - Terapia Respiratoria",
+                "campos": [
+                    {
+                        "id": "tr_hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "tr_nombre_paciente",
+                        "label": "Nombre del paciente",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tr_tipo_identificacion",
+                        "label": "Tipo de identificación",
+                        "tipo": "select",
+                        "opciones": [
+                            "RC",
+                            "TI",
+                            "CC",
+                            "CE",
+                            "Pasaporte"
+                        ]
+                    },
+                    {
+                        "id": "tr_numero_identificacion",
+                        "label": "Número de identificación",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "tr_fecha_nacimiento",
+                        "label": "Fecha de nacimiento",
+                        "tipo": "date"
+                    },
+                    {
+                        "id": "tr_ocupacion",
+                        "label": "Ocupación",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tr_motivo_consulta",
+                        "label": "Motivo de consulta",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Antecedentes - Terapia Respiratoria",
+                "campos": [
+                    {
+                        "id": "tr_ant_personales",
+                        "label": "Personales",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ant_farmacologicos",
+                        "label": "Farmacológicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ant_quirurgicos",
+                        "label": "Quirúrgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ant_hospitalizacion",
+                        "label": "Hospitalización",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ant_alergicos",
+                        "label": "Alérgicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ant_tabaco",
+                        "label": "Consumo de tabaco/cigarrillo",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No"
+                        ]
+                    },
+                    {
+                        "id": "tr_ant_alcohol",
+                        "label": "Consumo de alcohol",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Socialmente"
+                        ]
+                    },
+                    {
+                        "id": "tr_ant_actividad_fisica",
+                        "label": "Actividad física",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No"
+                        ]
+                    },
+                    {
+                        "id": "tr_ant_familiares",
+                        "label": "Familiares",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Neurológica y Signos Vitales",
+                "campos": [
+                    {
+                        "id": "tr_estado_conciencia",
+                        "label": "Estado de conciencia",
+                        "tipo": "select",
+                        "opciones": [
+                            "Alerta",
+                            "Letargo / somnolencia",
+                            "Obnubilación",
+                            "Estupor",
+                            "Coma"
+                        ]
+                    },
+                    {
+                        "id": "tr_fc",
+                        "label": "FC (Frecuencia Cardíaca)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tr_fr",
+                        "label": "FR (Frecuencia Respiratoria)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tr_so2",
+                        "label": "SO2 (Saturación de Oxígeno)",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "tr_ta",
+                        "label": "TA (Tensión Arterial)",
+                        "tipo": "text"
+                    }
+                ]
+            },
+            {
+                "titulo": "Sistema Cardiovascular y Pulmonar",
+                "campos": [
+                    {
+                        "id": "tr_ruidos_cardiacos",
+                        "label": "Ruidos cardiacos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_ruidos_pulmonares",
+                        "label": "Ruidos pulmonares",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_patron_ritmo",
+                        "label": "Patrón y ritmo respiratorio",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "tr_tipo_torax",
+                        "label": "Tipo de tórax",
+                        "tipo": "text"
+                    }
+                ]
+            },
+            {
+                "titulo": "Objetivos y Plan de Tratamiento - Terapia Respiratoria",
+                "campos": [
+                    {
+                        "id": "tr_num_sesiones",
+                        "label": "Número de sesiones requeridas o sugeridas aproximadamente",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "tr_plan_tratamiento",
+                        "label": "Plan de tratamiento",
+                        "tipo": "textarea"
+                    }
+                ]
+            }
+        ],
+        "psicologia": [
+            {
+                "titulo": "Anamnesis - Psicología",
+                "campos": [
+                    {
+                        "id": "psi_hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "psi_nombre_paciente",
+                        "label": "Nombre del paciente",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "psi_tipo_identificacion",
+                        "label": "Tipo de identificación",
+                        "tipo": "select",
+                        "opciones": [
+                            "RC",
+                            "TI",
+                            "CC",
+                            "CE",
+                            "Pasaporte"
+                        ]
+                    },
+                    {
+                        "id": "psi_numero_identificacion",
+                        "label": "Número de identificación",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "psi_fecha_nacimiento",
+                        "label": "Fecha de nacimiento",
+                        "tipo": "date"
+                    },
+                    {
+                        "id": "psi_ocupacion",
+                        "label": "Ocupación",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "psi_motivo_consulta",
+                        "label": "Motivo de consulta",
+                        "tipo": "textarea"
+                    }
+                ]
+            },
+            {
+                "titulo": "Antecedentes - Psicología",
+                "campos": [
+                    {
+                        "id": "psi_lugar_procedencia",
+                        "label": "Lugar de procedencia",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "psi_lugar_residencia",
+                        "label": "Lugar de residencia",
+                        "tipo": "text"
+                    },
+                    {
+                        "id": "psi_ant_psicologicos_personales",
+                        "label": "Psicológicos personales",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_ant_psicologicos_familiares",
+                        "label": "Psicológicos familiares",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_ant_farmacologicos",
+                        "label": "Farmacológicos",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_ant_tabaco",
+                        "label": "Consumo de tabaco/cigarrillo",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Ocasionalmente"
+                        ]
+                    },
+                    {
+                        "id": "psi_ant_alcohol",
+                        "label": "Consumo de alcohol",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Socialmente"
+                        ]
+                    },
+                    {
+                        "id": "psi_ant_actividad_fisica",
+                        "label": "Actividad física",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Ocasionalmente"
+                        ]
+                    },
+                    {
+                        "id": "psi_ant_spa",
+                        "label": "Consumo de spa",
+                        "tipo": "select",
+                        "opciones": [
+                            "Sí",
+                            "No",
+                            "Ocasionalmente"
+                        ]
+                    }
+                ]
+            },
+            {
+                "titulo": "Situaciones y Evaluación Clínica",
+                "campos": [
+                    {
+                        "id": "psi_sit_personal",
+                        "label": "Situaciones - Personal",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_sit_familiar",
+                        "label": "Situaciones - Familiar",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_sit_escolar",
+                        "label": "Situaciones - Escolar",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_sit_laboral",
+                        "label": "Situaciones - Laboral",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_observaciones_clinicas",
+                        "label": "Observaciones clínicas",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_concepto",
+                        "label": "Concepto psicológico",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_plan_accion",
+                        "label": "Plan de acción",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_compromiso",
+                        "label": "Compromiso",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "psi_num_sesiones",
+                        "label": "Número de sesiones requeridas o sugeridas aproximadamente",
+                        "tipo": "number"
+                    },
+                    {
+                        "id": "psi_hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -53,7 +53,7 @@ export const coincideProfesionCita = (cita, profesionUsuario) => {
 
     // 5. Fisioterapia / Terapia Física
     const esProfFisio = textoProfesion.includes("fisio") || textoProfesion.includes("fisica");
-    const esServFisio = textoServicio.includes("fisio") || textoServicio.includes("fisica");
+    const esServFisio = textoServicio.includes("fisio") || textoServicio.includes("fisica") || textoServicio.includes("hidro");
     if (esProfFisio && esServFisio) {
         return true;
     }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import SideMenu from '../../components/side-menu/side-menu.jsx';
 import { coincideProfesionCita } from '../../utils/filterServices.js';
+import FormularioEvolucion from '../../components/FormularioEvolucion/FormularioEvolucion.jsx';
 import './paciente.css';
 
 function Pacientes() {
@@ -13,6 +14,9 @@ function Pacientes() {
     const [filtroTab, setFiltroTab] = useState('mis-pacientes'); // 'mis-pacientes' | 'todos'
     const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
     const [actualizandoCitaId, setActualizandoCitaId] = useState(null);
+
+    // <--- 2. ESTADO PARA CONTROLAR LA CITA QUE SE VA A EVALUAR Y ATENDER
+    const [citaAtendiendo, setCitaAtendiendo] = useState(null);
 
     const miNombre = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
     const profesionUsuario = localStorage.getItem("usuarioProfesion") || "";
@@ -47,7 +51,6 @@ function Pacientes() {
         const grupos = {};
 
         citas.forEach(cita => {
-            // Filtrar si la cita no pertenece a la especialidad y no está asignada al profesional
             const esMia = cita.profesional === miNombre;
             const correspondeEspecialidad = esAdmin || coincideProfesionCita(cita, profesionUsuario);
 
@@ -55,8 +58,8 @@ function Pacientes() {
                 return;
             }
 
-            const key = (cita.identificacion && cita.identificacion.trim()) 
-                ? cita.identificacion.trim() 
+            const key = (cita.identificacion && cita.identificacion.trim())
+                ? cita.identificacion.trim()
                 : (cita.nombre_paciente ? cita.nombre_paciente.trim().toLowerCase() : 'desconocido');
 
             if (!grupos[key]) {
@@ -74,7 +77,6 @@ function Pacientes() {
             grupos[key].citas.push(cita);
         });
 
-        // Convertir a lista y calcular métricas
         return Object.values(grupos).map(paciente => {
             const citasPendientes = paciente.citas.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada');
             const citasAtendidas = paciente.citas.filter(c => c.estado === 'completada');
@@ -87,12 +89,12 @@ function Pacientes() {
                 asignadoAMi
             };
         });
-    }, [citas, miNombre]);
+    }, [citas, miNombre, profesionUsuario, esAdmin]);
 
     // Filtrar pacientes según tab y texto de búsqueda
     const pacientesFiltrados = useMemo(() => {
         return pacientesAgrupados.filter(p => {
-            const coincideBusqueda = 
+            const coincideBusqueda =
                 p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
                 p.identificacion.toLowerCase().includes(busqueda.toLowerCase()) ||
                 p.municipio.toLowerCase().includes(busqueda.toLowerCase());
@@ -106,48 +108,13 @@ function Pacientes() {
         });
     }, [pacientesAgrupados, busqueda, filtroTab]);
 
-    // Marcar una cita específica como Atendida (completada)
-    const handleMarcarAtendida = async (citaId) => {
-        try {
-            setActualizandoCitaId(citaId);
-            const { error: err } = await supabase
-                .from('citas')
-                .update({ estado: 'completada' })
-                .eq('id', citaId);
-
-            if (err) throw err;
-
-            // Actualizar estado local
-            setCitas(prev => prev.map(c => c.id === citaId ? { ...c, estado: 'completada' } : c));
-
-            // Si hay un modal abierto, actualizar la vista del paciente seleccionado
-            if (pacienteSeleccionado) {
-                setPacienteSeleccionado(prev => {
-                    if (!prev) return null;
-                    const nuevasCitas = prev.citas.map(c => c.id === citaId ? { ...c, estado: 'completada' } : c);
-                    return {
-                        ...prev,
-                        citas: nuevasCitas,
-                        citasPendientes: nuevasCitas.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada'),
-                        citasAtendidas: nuevasCitas.filter(c => c.estado === 'completada')
-                    };
-                });
-            }
-        } catch (err) {
-            console.error('Error al completar cita:', err);
-            alert('Error al marcar la cita: ' + err.message);
-        } finally {
-            setActualizandoCitaId(null);
-        }
-    };
-
     // Asignar cita al profesional logueado
     const handleAsignarCita = async (citaId) => {
         try {
             setActualizandoCitaId(citaId);
             const { error: err } = await supabase
                 .from('citas')
-                .update({ 
+                .update({
                     profesional: miNombre,
                     estado: 'confirmada'
                 })
@@ -214,13 +181,13 @@ function Pacientes() {
                     </div>
 
                     <div className="tab-filters">
-                        <button 
+                        <button
                             className={`tab-btn ${filtroTab === 'mis-pacientes' ? 'active' : ''}`}
                             onClick={() => setFiltroTab('mis-pacientes')}
                         >
                             🧑‍⚕️ Mis Pacientes ({pacientesAgrupados.filter(p => p.asignadoAMi).length})
                         </button>
-                        <button 
+                        <button
                             className={`tab-btn ${filtroTab === 'todos' ? 'active' : ''}`}
                             onClick={() => setFiltroTab('todos')}
                         >
@@ -259,8 +226,8 @@ function Pacientes() {
                 {!loading && !error && pacientesFiltrados.length > 0 && (
                     <div className="pacientes-grid">
                         {pacientesFiltrados.map((paciente) => (
-                            <div 
-                                key={paciente.id} 
+                            <div
+                                key={paciente.id}
                                 className="paciente-card-item"
                                 onClick={() => setPacienteSeleccionado(paciente)}
                             >
@@ -295,7 +262,7 @@ function Pacientes() {
                                     </span>
                                 </div>
 
-                                <button 
+                                <button
                                     className="btn-ver-historial"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -373,12 +340,18 @@ function Pacientes() {
                                                         </button>
                                                     )}
 
+                                                    {/* <--- 3. AQUÍ REEMPLAZAMOS EL BOTÓN ANTIGUO POR EL QUE ABRE EL FORMULARIO DE EVALUACIÓN */}
                                                     <button
                                                         className="btn-action-complete"
-                                                        disabled={actualizandoCitaId === cita.id}
-                                                        onClick={() => handleMarcarAtendida(cita.id)}
+                                                        onClick={() => {
+                                                            setCitaAtendiendo({
+                                                                id: cita.id,
+                                                                paciente_id: pacienteSeleccionado.id,
+                                                                servicio: cita.servicio // Ej: "fonoaudiologia", "terapia_fisica", etc.
+                                                            });
+                                                        }}
                                                     >
-                                                        {actualizandoCitaId === cita.id ? 'Guardando...' : '✓ Marcar como Atendida'}
+                                                        📝 Realizar Evaluación y Atender
                                                     </button>
                                                 </div>
                                             </div>
@@ -423,6 +396,21 @@ function Pacientes() {
                         </footer>
                     </div>
                 </div>
+            )}
+
+            {/* <--- 4. AQUÍ RENDERIZAMOS EL MODAL DEL FORMULARIO DE EVOLUCIÓN / EVALUACIÓN */}
+            {citaAtendiendo && (
+                <FormularioEvolucion
+                    citaId={citaAtendiendo.id}
+                    pacienteId={citaAtendiendo.paciente_id}
+                    profesion={citaAtendiendo.servicio}
+                    onCerrar={() => setCitaAtendiendo(null)}
+                    onGuardadoExitoso={() => {
+                        setCitaAtendiendo(null);
+                        setPacienteSeleccionado(null); // Cierra el modal de detalles del paciente
+                        cargarCitas(); // Recarga la lista de citas actualizadas desde Supabase
+                    }}
+                />
             )}
         </div>
     );
