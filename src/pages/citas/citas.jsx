@@ -3,11 +3,11 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { db } from '../../lib/firebaseConfig.js';
 import { doc, getDoc } from 'firebase/firestore';
 import SideMenu from '../../components/side-menu/side-menu.jsx';
-import { coincideProfesionCita } from '../../utils/filterServices.js';
+import { coincideProfesionCita } from '../../utils/filterServices.js'; // <--- IMPORTAMOS TU FILTRO
 import './citas.css';
 
 function CitasProfesional() {
-    const [citas, setCitas] = useState([]);
+    const [pacientes, setPacientes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cargandoPerfil, setCargandoPerfil] = useState(false);
     const [error, setError] = useState(null);
@@ -22,7 +22,6 @@ function CitasProfesional() {
         const iniciarCarga = async () => {
             let prof = profesionUsuario;
 
-            // Si no está en localStorage, se consulta en Firestore
             if (!prof && cedulaUsuario) {
                 try {
                     setCargandoPerfil(true);
@@ -39,189 +38,224 @@ function CitasProfesional() {
                 }
             }
 
-            await obtenerCitas();
+            await obtenerPacientes();
         };
 
         iniciarCarga();
     }, [cedulaUsuario]);
 
-    const obtenerCitas = async () => {
+    const obtenerPacientes = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const { data, err } = await supabase
-                .from('citas')
+            const { data, error: err } = await supabase
+                .from('pacientes')
                 .select('*')
-                .order('fecha', { ascending: true });
+                .order('created_at', { ascending: false });
 
             if (err) throw err;
 
-            setCitas(data || []);
+            setPacientes(data || []);
         } catch (err) {
-            console.error('Error al obtener las citas:', err.message);
-            setError('No se pudieron cargar las citas. Verifica la conexión.');
+            console.error('Error al obtener los pacientes:', err.message);
+            setError('No se pudieron cargar los pacientes. Verifica la conexión.');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleSeleccionarPaciente = async (citaId) => {
+    const handleAsignarsePaciente = async (paciente) => {
         try {
-            setActualizandoId(citaId);
+            if (!paciente || !paciente.id) {
+                alert("Error: No se pudo identificar al paciente.");
+                return;
+            }
 
+            setActualizandoId(paciente.id);
+
+            // 1. Actualizamos la tabla 'pacientes'
             const { error: updateError } = await supabase
-                .from('citas')
-                .update({
-                    profesional: nombreProfesional,
-                    estado: 'confirmada'
-                })
-                .eq('id', citaId);
+                .from('pacientes')
+                .update({ profesional: nombreProfesional })
+                .eq('id', paciente.id);
 
             if (updateError) throw updateError;
 
-            // Actualización local en estado
-            setCitas(prevCitas =>
-                prevCitas.map(cita =>
-                    cita.id === citaId ? { ...cita, profesional: nombreProfesional, estado: 'confirmada' } : cita
+            // 2. Creamos la cita automática para que salte a 'Mis Pacientes'
+            const fechaHoy = new Date().toISOString().split('T')[0];
+            const horaActual = new Date().toTimeString().split(' ')[0];
+
+            const { error: citaError } = await supabase
+                .from('citas')
+                .insert([
+                    {
+                        nombre_paciente: paciente.nombre_completo,
+                        identificacion: paciente.numero_identificacion,
+                        telefono_contacto: paciente.telefono,
+                        direccion_atencion: paciente.direccion,
+                        municipio_ciudad: paciente.municipio_ciudad,
+                        servicio: paciente.servicio_principal,
+                        modalidad: paciente.modalidad_preferida || '30 minutos',
+                        fecha: fechaHoy,
+                        hora: horaActual,
+                        estado: 'confirmada', // Nace confirmada para ti
+                        profesional: nombreProfesional
+                    }
+                ]);
+
+            if (citaError) throw citaError;
+
+            // 3. Actualizamos la vista localmente
+            setPacientes(prev =>
+                prev.map(p =>
+                    p.id === paciente.id ? { ...p, profesional: nombreProfesional } : p
                 )
             );
+
+            alert("¡Paciente asignado con éxito! Ya se encuentra disponible en 'Mis Pacientes'.");
+
         } catch (err) {
-            console.error('Error al asignar profesional:', err.message);
-            alert('Error al asignar profesional: ' + err.message);
+            console.error('Error al asignar paciente:', err.message);
+            alert('Error al asignar paciente: ' + err.message);
         } finally {
             setActualizandoId(null);
         }
     };
 
-    // Filtro estricto automático: solo pasan citas que coinciden con la profesión del usuario
-    const citasEspecialidad = useMemo(() => {
+    // FILTRADO USANDO TU UTILIDAD OFICIAL
+    const pacientesFiltrados = useMemo(() => {
         if (!profesionUsuario) return [];
-        return citas.filter(cita => coincideProfesionCita(cita, profesionUsuario));
-    }, [citas, profesionUsuario]);
+        return pacientes.filter(paciente => {
+            // Creamos un objeto simulando la estructura que espera coincideProfesionCita
+            const objetoParaFiltrar = {
+                servicio: paciente.servicio_principal,
+                especialidad: paciente.servicio_principal,
+                profesion: paciente.servicio_principal
+            };
+
+            return coincideProfesionCita(objetoParaFiltrar, profesionUsuario);
+        });
+    }, [pacientes, profesionUsuario]);
 
     const isLoadingTotal = loading || cargandoPerfil;
 
     return (
         <section className="citas-section">
-            {/* Botón menú hamburguesa */}
             <button className="hamburger-btn" onClick={() => setMenuAbierto(!menuAbierto)} aria-label="Abrir menú">
                 {menuAbierto ? '✕' : '☰'}
             </button>
 
-            {/* Menú lateral */}
             <div className={`sidebar-wrapper ${menuAbierto ? 'abierto' : ''}`}>
                 <div className="sidebar-overlay" onClick={() => setMenuAbierto(false)}></div>
                 <SideMenu />
             </div>
 
             <div className="citas-container">
-                <h2>Citas de {profesionUsuario || 'Especialidad'}</h2>
+                <h2>Pacientes Registrados - {profesionUsuario || 'Especialidad'}</h2>
 
                 {isLoadingTotal && (
                     <div className="citas-state">
                         <div className="spinner"></div>
-                        <p>Cargando citas de {profesionUsuario || 'tu especialidad'}...</p>
+                        <p>Cargando pacientes...</p>
                     </div>
                 )}
 
                 {error && (
                     <div className="citas-state error">
                         <p>{error}</p>
-                        <button onClick={obtenerCitas} className="btn-reintentar">Reintentar</button>
+                        <button onClick={obtenerPacientes} className="btn-reintentar">Reintentar</button>
                     </div>
                 )}
 
-                {!isLoadingTotal && !error && citasEspecialidad.length === 0 && (
+                {!isLoadingTotal && !error && pacientesFiltrados.length === 0 && (
                     <div className="citas-empty">
-                        <p>No hay citas registradas para {profesionUsuario || 'tu especialidad'} en este momento.</p>
+                        <p>No hay pacientes registrados para {profesionUsuario || 'tu especialidad'} en este momento.</p>
                     </div>
                 )}
 
-                {!isLoadingTotal && !error && citasEspecialidad.length > 0 && (
+                {!isLoadingTotal && !error && pacientesFiltrados.length > 0 && (
                     <div className="citas-grid">
-                        {citasEspecialidad.map((cita) => (
-                            <div key={cita.id} className="cita-card">
+                        {pacientesFiltrados.map((paciente) => (
+                            <div key={paciente.id} className="cita-card">
                                 <div className="cita-header">
-                                    <span className={`cita-estado ${cita.estado?.toLowerCase() || 'pendiente'}`}>
-                                        {cita.estado || 'Pendiente'}
+                                    <span className="cita-estado confirmada">
+                                        Registrado
                                     </span>
-                                    {cita.hora && (
-                                        <span className="cita-hora">
-                                            ⏰ {cita.hora}
-                                        </span>
-                                    )}
                                 </div>
 
                                 <div className="cita-body">
-                                    <h3>{cita.servicio || 'Consulta Médica'}</h3>
+                                    <h3>{paciente.nombre_completo || 'Sin nombre'}</h3>
 
-                                    {cita.nombre_paciente && (
-                                        <p className="cita-paciente">
-                                            <strong>Paciente:</strong> {cita.nombre_paciente}
+                                    <p className="cita-identificacion">
+                                        <strong>Documento:</strong> {paciente.tipo_identificacion || 'C.C'} {paciente.numero_identificacion}
+                                    </p>
+
+                                    {paciente.edad && (
+                                        <p className="cita-edad">
+                                            <strong>Edad:</strong> {paciente.edad} años
                                         </p>
                                     )}
 
-                                    {cita.identificacion && (
-                                        <p className="cita-identificacion">
-                                            <strong>Documento:</strong> {cita.identificacion}
-                                        </p>
-                                    )}
-
-                                    {cita.telefono_contacto && (
+                                    {paciente.telefono && (
                                         <p className="cita-telefono">
-                                            <strong>Teléfono:</strong> {cita.telefono_contacto}
+                                            <strong>Teléfono:</strong> {paciente.telefono}
                                         </p>
                                     )}
 
-                                    {cita.fecha && (
-                                        <p className="cita-fecha">
-                                            <strong>Fecha:</strong> {cita.fecha}
+                                    {paciente.diagnostico && (
+                                        <p className="cita-diagnostico">
+                                            <strong>Diagnóstico:</strong> {paciente.diagnostico}
                                         </p>
                                     )}
 
-                                    {cita.modalidad && (
+                                    {paciente.servicio_principal && (
+                                        <p className="cita-servicio">
+                                            <strong>Servicio:</strong> {paciente.servicio_principal}
+                                        </p>
+                                    )}
+
+                                    {paciente.modalidad_preferida && (
                                         <p className="cita-modalidad">
-                                            <strong>Modalidad:</strong> {cita.modalidad}
+                                            <strong>Modalidad:</strong> {paciente.modalidad_preferida}
                                         </p>
                                     )}
 
-                                    {cita.profesional && (
+                                    {paciente.profesional && (
                                         <p className="cita-profesional">
-                                            <strong>Profesional Asignado:</strong> {cita.profesional}
+                                            <strong>Profesional Asignado:</strong> {paciente.profesional}
                                         </p>
                                     )}
 
                                     <hr className="divider" />
 
-                                    <p className="cita-ubicacion-title"><strong>Ubicación de Atención:</strong></p>
+                                    <p className="cita-ubicacion-title"><strong>Ubicación:</strong></p>
 
-                                    {cita.municipio_ciudad && (
+                                    {paciente.municipio_ciudad && (
                                         <p className="cita-municipio">
-                                            📍 {cita.municipio_ciudad} {cita.barrio_localidad ? `- ${cita.barrio_localidad}` : ''}
+                                            📍 {paciente.municipio_ciudad} {paciente.barrio_localidad ? `- ${paciente.barrio_localidad}` : ''}
                                         </p>
                                     )}
 
-                                    {cita.direccion_atencion && (
+                                    {paciente.direccion && (
                                         <p className="cita-direccion">
-                                            🏠 {cita.direccion_atencion}
+                                            🏠 {paciente.direccion}
                                         </p>
                                     )}
 
                                     <div className="cita-acciones">
                                         <button
-                                            className={`btn-seleccionar ${cita.profesional === nombreProfesional ? 'btn-asignado-propio' : ''}`}
-                                            disabled={actualizandoId === cita.id}
-                                            onClick={() => handleSeleccionarPaciente(cita.id)}
+                                            className={`btn-seleccionar ${paciente.profesional === nombreProfesional ? 'btn-asignado-propio' : ''}`}
+                                            disabled={actualizandoId === paciente.id}
+                                            onClick={() => handleAsignarsePaciente(paciente)}
                                         >
-                                            {actualizandoId === cita.id
-                                                ? 'Asignando...'
-                                                : cita.profesional === nombreProfesional
+                                            {actualizandoId === paciente.id
+                                                ? 'Actualizando...'
+                                                : paciente.profesional === nombreProfesional
                                                     ? '✓ Asignado a Ti'
-                                                    : cita.profesional
-                                                        ? 'Reasignar Paciente'
-                                                        : 'Asignar Paciente'
-                                            }
+                                                    : paciente.profesional
+                                                        ? 'Reasignar a Mí'
+                                                        : 'Asignarme este Paciente'}
                                         </button>
                                     </div>
 

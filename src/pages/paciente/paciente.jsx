@@ -15,7 +15,7 @@ function Pacientes() {
     const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
     const [actualizandoCitaId, setActualizandoCitaId] = useState(null);
 
-    // ESTADO PARA CONTROLAR LA CITA QUE SE VA A EVALUAR Y ATENDER
+
     const [citaAtendiendo, setCitaAtendiendo] = useState(null);
 
     const miNombre = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
@@ -46,12 +46,16 @@ function Pacientes() {
         }
     };
 
-    // Agrupar citas por paciente (usando identificación o nombre)
+    // Agrupar citas por paciente utilizando la utilidad profesional coincideProfesionCita
     const pacientesAgrupados = useMemo(() => {
         const grupos = {};
 
         citas.forEach(cita => {
-            const esMia = cita.profesional === miNombre;
+            // Normalizamos los nombres para evitar que espacios o mayúsculas rompan el match
+            const nombreCitaNormalizado = (cita.profesional || '').trim().toLowerCase();
+            const miNombreNormalizado = (miNombre || '').trim().toLowerCase();
+
+            const esMia = nombreCitaNormalizado === miNombreNormalizado;
             const correspondeEspecialidad = esAdmin || coincideProfesionCita(cita, profesionUsuario);
 
             if (!esMia && !correspondeEspecialidad) {
@@ -64,7 +68,7 @@ function Pacientes() {
 
             if (!grupos[key]) {
                 grupos[key] = {
-                    id: key, // Esto es la cédula
+                    id: key,
                     nombre: cita.nombre_paciente || 'Paciente sin nombre',
                     identificacion: cita.identificacion || 'Sin documento',
                     telefono: cita.telefono_contacto || '',
@@ -80,13 +84,23 @@ function Pacientes() {
         return Object.values(grupos).map(paciente => {
             const citasPendientes = paciente.citas.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada');
             const citasAtendidas = paciente.citas.filter(c => c.estado === 'completada');
-            const asignadoAMi = paciente.citas.some(c => c.profesional === miNombre);
+
+            const miNombreNormalizado = (miNombre || '').trim().toLowerCase();
+            const asignadoAMi = paciente.citas.some(c => (c.profesional || '').trim().toLowerCase() === miNombreNormalizado);
+
+            // CÁLCULO SEGURO DE SESIONES
+            const sesionesTotales = 10; // Puedes cambiar el estándar o traerlo de la BD si lo agregas luego
+            const sesionesRealizadas = citasAtendidas.length;
+            const sesionesRestantes = Math.max(0, sesionesTotales - sesionesRealizadas);
 
             return {
                 ...paciente,
                 citasPendientes,
                 citasAtendidas,
-                asignadoAMi
+                asignadoAMi,
+                sesionesTotales,
+                sesionesRealizadas,
+                sesionesRestantes
             };
         });
     }, [citas, miNombre, profesionUsuario, esAdmin]);
@@ -108,41 +122,6 @@ function Pacientes() {
         });
     }, [pacientesAgrupados, busqueda, filtroTab]);
 
-    const handleAsignarCita = async (citaId) => {
-        try {
-            setActualizandoCitaId(citaId);
-            const { error: err } = await supabase
-                .from('citas')
-                .update({
-                    profesional: miNombre,
-                    estado: 'confirmada'
-                })
-                .eq('id', citaId);
-
-            if (err) throw err;
-
-            setCitas(prev => prev.map(c => c.id === citaId ? { ...c, profesional: miNombre, estado: 'confirmada' } : c));
-
-            if (pacienteSeleccionado) {
-                setPacienteSeleccionado(prev => {
-                    if (!prev) return null;
-                    const nuevasCitas = prev.citas.map(c => c.id === citaId ? { ...c, profesional: miNombre, estado: 'confirmada' } : c);
-                    return {
-                        ...prev,
-                        citas: nuevasCitas,
-                        citasPendientes: nuevasCitas.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada'),
-                        citasAtendidas: nuevasCitas.filter(c => c.estado === 'completada'),
-                        asignadoAMi: true
-                    };
-                });
-            }
-        } catch (err) {
-            console.error('Error al asignar cita:', err);
-            alert('Error al asignar: ' + err.message);
-        } finally {
-            setActualizandoCitaId(null);
-        }
-    };
 
     const handleCancelarCita = async (citaId) => {
         if (!window.confirm("¿Estás seguro de que deseas cancelar esta cita médica?")) return;
@@ -157,10 +136,8 @@ function Pacientes() {
 
             if (err) throw err;
 
-            // Actualizar la lista general de citas en el estado
             setCitas(prev => prev.map(c => c.id === citaId ? { ...c, estado: 'cancelada' } : c));
 
-            // Actualizar el estado del modal del paciente seleccionado
             if (pacienteSeleccionado) {
                 setPacienteSeleccionado(prev => {
                     if (!prev) return null;
@@ -182,7 +159,7 @@ function Pacientes() {
             setActualizandoCitaId(null);
         }
     };
-    // Función que busca el UUID real del paciente en la BD antes de abrir el formulario
+
     const handleAbrirEvaluacion = async (cita, paciente) => {
         try {
             setActualizandoCitaId(cita.id);
@@ -289,7 +266,7 @@ function Pacientes() {
                     <div className="pacientes-empty-box">
                         <p>
                             {filtroTab === 'mis-pacientes'
-                                ? 'No tienes pacientes asignados actualmente. Ve a "Pacientes Pendientes" para asignarte citas.'
+                                ? 'No tienes pacientes asignados actualmente. Ve a "Todos los Pacientes" para asignarte citas.'
                                 : 'No se encontraron pacientes que coincidan con la búsqueda.'}
                         </p>
                     </div>
@@ -373,6 +350,13 @@ function Pacientes() {
                                 {pacienteSeleccionado.municipio && (
                                     <p><strong>Ciudad/Municipio:</strong> {pacienteSeleccionado.municipio}</p>
                                 )}
+
+                                {/* NUEVO BLOQUE DE SESIONES */}
+                                <div className="sesiones-counter-box" style={{ marginTop: '10px', padding: '10px', background: '#f0f4f8', borderRadius: '8px', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <span>🎯 <strong>Totales:</strong> {pacienteSeleccionado.sesionesTotales || 10}</span>
+                                    <span>✅ <strong>Atendidas:</strong> {pacienteSeleccionado.sesionesRealizadas}</span>
+                                    <span style={{ color: '#d97706' }}>⏳ <strong>Restantes:</strong> {pacienteSeleccionado.sesionesRestantes}</span>
+                                </div>
                             </div>
 
                             <div className="modal-section">
@@ -401,15 +385,6 @@ function Pacientes() {
                                                 </div>
 
                                                 <div className="cita-detail-actions">
-                                                    {cita.profesional !== miNombre && (
-                                                        <button
-                                                            className="btn-action-assign"
-                                                            disabled={actualizandoCitaId === cita.id}
-                                                            onClick={() => handleAsignarCita(cita.id)}
-                                                        >
-                                                            {actualizandoCitaId === cita.id ? 'Asignando...' : 'Asignarme esta cita'}
-                                                        </button>
-                                                    )}
 
                                                     <button
                                                         className="btn-action-complete"
@@ -419,7 +394,6 @@ function Pacientes() {
                                                         📝 Realizar Evaluación y Atender
                                                     </button>
 
-                                                    {/* NUEVO BOTÓN DE CANCELAR */}
                                                     <button
                                                         className="btn-action-cancel"
                                                         disabled={actualizandoCitaId === cita.id}
