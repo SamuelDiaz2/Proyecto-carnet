@@ -144,6 +144,44 @@ function Pacientes() {
         }
     };
 
+    const handleCancelarCita = async (citaId) => {
+        if (!window.confirm("¿Estás seguro de que deseas cancelar esta cita médica?")) return;
+
+        try {
+            setActualizandoCitaId(citaId);
+
+            const { error: err } = await supabase
+                .from('citas')
+                .update({ estado: 'cancelada' })
+                .eq('id', citaId);
+
+            if (err) throw err;
+
+            // Actualizar la lista general de citas en el estado
+            setCitas(prev => prev.map(c => c.id === citaId ? { ...c, estado: 'cancelada' } : c));
+
+            // Actualizar el estado del modal del paciente seleccionado
+            if (pacienteSeleccionado) {
+                setPacienteSeleccionado(prev => {
+                    if (!prev) return null;
+                    const nuevasCitas = prev.citas.map(c => c.id === citaId ? { ...c, estado: 'cancelada' } : c);
+                    return {
+                        ...prev,
+                        citas: nuevasCitas,
+                        citasPendientes: nuevasCitas.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada'),
+                        citasAtendidas: nuevasCitas.filter(c => c.estado === 'completada')
+                    };
+                });
+            }
+
+            alert("¡Cita cancelada con éxito!");
+        } catch (err) {
+            console.error('Error al cancelar la cita:', err);
+            alert('Error al cancelar: ' + err.message);
+        } finally {
+            setActualizandoCitaId(null);
+        }
+    };
     // Función que busca el UUID real del paciente en la BD antes de abrir el formulario
     const handleAbrirEvaluacion = async (cita, paciente) => {
         try {
@@ -378,7 +416,17 @@ function Pacientes() {
                                                         disabled={actualizandoCitaId === cita.id}
                                                         onClick={() => handleAbrirEvaluacion(cita, pacienteSeleccionado)}
                                                     >
-                                                        {actualizandoCitaId === cita.id ? 'Preparando...' : '📝 Realizar Evaluación y Atender'}
+                                                        📝 Realizar Evaluación y Atender
+                                                    </button>
+
+                                                    {/* NUEVO BOTÓN DE CANCELAR */}
+                                                    <button
+                                                        className="btn-action-cancel"
+                                                        disabled={actualizandoCitaId === cita.id}
+                                                        onClick={() => handleCancelarCita(cita.id)}
+                                                        style={{ backgroundColor: '#ff4d4f', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}
+                                                    >
+                                                        {actualizandoCitaId === cita.id ? 'Procesando...' : '❌ Cancelar Cita'}
                                                     </button>
                                                 </div>
                                             </div>
