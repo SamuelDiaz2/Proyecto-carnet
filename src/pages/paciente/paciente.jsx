@@ -426,7 +426,7 @@ function Pacientes() {
                                                         onClick={() => handleCancelarCita(cita.id)}
                                                         style={{ backgroundColor: '#ff4d4f', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}
                                                     >
-                                                        {actualizandoCitaId === cita.id ? 'Procesando...' : '❌ Cancelar Cita'}
+                                                        {actualizandoCitaId === cita.id ? 'Procesando...' : 'Cancelar Cita'}
                                                     </button>
                                                 </div>
                                             </div>
