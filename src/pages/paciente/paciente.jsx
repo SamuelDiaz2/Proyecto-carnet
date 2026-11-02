@@ -15,7 +15,7 @@ function Pacientes() {
     const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
     const [actualizandoCitaId, setActualizandoCitaId] = useState(null);
 
-    // <--- 2. ESTADO PARA CONTROLAR LA CITA QUE SE VA A EVALUAR Y ATENDER
+    // ESTADO PARA CONTROLAR LA CITA QUE SE VA A EVALUAR Y ATENDER
     const [citaAtendiendo, setCitaAtendiendo] = useState(null);
 
     const miNombre = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
@@ -64,7 +64,7 @@ function Pacientes() {
 
             if (!grupos[key]) {
                 grupos[key] = {
-                    id: key,
+                    id: key, // Esto es la cédula
                     nombre: cita.nombre_paciente || 'Paciente sin nombre',
                     identificacion: cita.identificacion || 'Sin documento',
                     telefono: cita.telefono_contacto || '',
@@ -108,7 +108,6 @@ function Pacientes() {
         });
     }, [pacientesAgrupados, busqueda, filtroTab]);
 
-    // Asignar cita al profesional logueado
     const handleAsignarCita = async (citaId) => {
         try {
             setActualizandoCitaId(citaId);
@@ -140,6 +139,42 @@ function Pacientes() {
         } catch (err) {
             console.error('Error al asignar cita:', err);
             alert('Error al asignar: ' + err.message);
+        } finally {
+            setActualizandoCitaId(null);
+        }
+    };
+
+    // Función que busca el UUID real del paciente en la BD antes de abrir el formulario
+    const handleAbrirEvaluacion = async (cita, paciente) => {
+        try {
+            setActualizandoCitaId(cita.id);
+
+            const documentoBuscado = String(paciente.identificacion || cita.identificacion || '').trim();
+
+            const { data: pacienteDb, error } = await supabase
+                .from('pacientes')
+                .select('id, numero_identificacion')
+                .eq('numero_identificacion', documentoBuscado)
+                .limit(1);
+
+            if (error) {
+                alert(`Error al buscar paciente: ${error.message}`);
+                return;
+            }
+
+            if (!pacienteDb || pacienteDb.length === 0) {
+                alert(`No se encontró el registro en la tabla 'pacientes' para la cédula: ${documentoBuscado}.`);
+                return;
+            }
+
+            setCitaAtendiendo({
+                citaId: cita.id,
+                pacienteId: pacienteDb[0].id,
+                servicio: cita.servicio
+            });
+
+        } catch (err) {
+            alert('Hubo un error de conexión al verificar el paciente.');
         } finally {
             setActualizandoCitaId(null);
         }
@@ -290,7 +325,6 @@ function Pacientes() {
                         </header>
 
                         <div className="modal-body-scroll">
-                            {/* Datos de contacto */}
                             <div className="modal-patient-info">
                                 {pacienteSeleccionado.telefono && (
                                     <p><strong>Teléfono:</strong> {pacienteSeleccionado.telefono}</p>
@@ -303,7 +337,6 @@ function Pacientes() {
                                 )}
                             </div>
 
-                            {/* Sección 1: Citas Restantes / Pendientes */}
                             <div className="modal-section">
                                 <h3 className="section-title section-pending-title">
                                     ⏳ Citas Restantes ({pacienteSeleccionado.citasPendientes.length})
@@ -340,18 +373,12 @@ function Pacientes() {
                                                         </button>
                                                     )}
 
-                                                    {/* <--- 3. AQUÍ REEMPLAZAMOS EL BOTÓN ANTIGUO POR EL QUE ABRE EL FORMULARIO DE EVALUACIÓN */}
                                                     <button
                                                         className="btn-action-complete"
-                                                        onClick={() => {
-                                                            setCitaAtendiendo({
-                                                                id: cita.id,
-                                                                paciente_id: pacienteSeleccionado.id,
-                                                                servicio: cita.servicio // Ej: "fonoaudiologia", "terapia_fisica", etc.
-                                                            });
-                                                        }}
+                                                        disabled={actualizandoCitaId === cita.id}
+                                                        onClick={() => handleAbrirEvaluacion(cita, pacienteSeleccionado)}
                                                     >
-                                                        📝 Realizar Evaluación y Atender
+                                                        {actualizandoCitaId === cita.id ? 'Preparando...' : '📝 Realizar Evaluación y Atender'}
                                                     </button>
                                                 </div>
                                             </div>
@@ -360,7 +387,6 @@ function Pacientes() {
                                 )}
                             </div>
 
-                            {/* Sección 2: Citas Atendidas */}
                             <div className="modal-section">
                                 <h3 className="section-title section-completed-title">
                                     ✅ Citas Atendidas ({pacienteSeleccionado.citasAtendidas.length})
@@ -398,17 +424,16 @@ function Pacientes() {
                 </div>
             )}
 
-            {/* <--- 4. AQUÍ RENDERIZAMOS EL MODAL DEL FORMULARIO DE EVOLUCIÓN / EVALUACIÓN */}
             {citaAtendiendo && (
                 <FormularioEvolucion
-                    citaId={citaAtendiendo.id}
-                    pacienteId={citaAtendiendo.paciente_id}
+                    citaId={citaAtendiendo.citaId}
+                    pacienteId={citaAtendiendo.pacienteId}
                     profesion={citaAtendiendo.servicio}
                     onCerrar={() => setCitaAtendiendo(null)}
                     onGuardadoExitoso={() => {
                         setCitaAtendiendo(null);
-                        setPacienteSeleccionado(null); // Cierra el modal de detalles del paciente
-                        cargarCitas(); // Recarga la lista de citas actualizadas desde Supabase
+                        setPacienteSeleccionado(null);
+                        cargarCitas();
                     }}
                 />
             )}

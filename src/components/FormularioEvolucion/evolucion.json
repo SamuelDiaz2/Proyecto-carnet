@@ -1,0 +1,92 @@
+{
+    "evoluciones": {
+        "terapia_ocupacional": [
+            {
+                "titulo": "Evolución Terapia Ocupacional",
+                "campos": [
+                    {
+                        "id": "hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "evolucion",
+                        "label": "Evolución",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ],
+        "fonoaudiologia": [
+            {
+                "titulo": "Evolución Terapia Fonoaudiología",
+                "campos": [
+                    {
+                        "id": "hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "evolucion",
+                        "label": "Evolución",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ],
+        "terapia_fisica": [
+            {
+                "titulo": "Evolución Terapia Física",
+                "campos": [
+                    {
+                        "id": "hora_inicial",
+                        "label": "Hora Inicial",
+                        "tipo": "time"
+                    },
+                    {
+                        "id": "evolucion",
+                        "label": "Evolución",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "hora_final",
+                        "label": "Hora final",
+                        "tipo": "time"
+                    }
+                ]
+            }
+        ],
+        "observaciones_clinicas": [
+            {
+                "titulo": "Observaciones Clínicas",
+                "campos": [
+                    {
+                        "id": "observaciones_clinicas",
+                        "label": "Observaciones clínicas",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "cumplimiento",
+                        "label": "Cumplimiento",
+                        "tipo": "textarea"
+                    },
+                    {
+                        "id": "compromiso",
+                        "label": "Compromiso",
+                        "tipo": "textarea"
+                    }
+                ]
+            }
+        ]
+    }
+}
