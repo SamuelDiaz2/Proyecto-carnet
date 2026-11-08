@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Rehabilitar-C</string>
     <string name="title_activity_main">Rehabilitar-C</string>
-    <string name="package_name">com.CarnetRehabilitarC.app</string>
-    <string name="custom_url_scheme">com.CarnetRehabilitarC.app</string>
+    <string name="package_name">com.RehabilitarC.app</string>
+    <string name="custom_url_scheme">com.RehabilitarC.app</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.CarnetRehabilitarC.app;
+package com.RehabilitarC.app;
 
 import android.os.Bundle;
 import android.view.WindowManager;
