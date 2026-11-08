@@ -10,10 +10,10 @@ const SideMenu = () => {
         return cedula === "1028862517" || cedula === "1073519428";
     }, []);
 
-    // Función para limpiar el localStorage y salir de la aplicación
     const handleLogout = () => {
         localStorage.removeItem('sesion');
-        navigate('/');
+        window.dispatchEvent(new Event('app-session-change'));
+        navigate('/login', { replace: true });
     };
 
     return (

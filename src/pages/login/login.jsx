@@ -10,6 +10,12 @@ function Login() {
     const [pin, setPin] = useState('');
     const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
+    const iniciarSesion = () => {
+        localStorage.setItem("sesion", "true");
+        window.dispatchEvent(new Event('app-session-change'));
+        navigate('/carnet');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -49,13 +55,11 @@ function Login() {
                     localStorage.setItem("usuarioCedula", cedulaTrimmed);
                     localStorage.setItem("usuarioFoto", datos.fotoUrl || "");
                     localStorage.setItem("usuarioProfesion", datos.profesion || "");
-                    localStorage.setItem("sesion", "false");
                     if (datos.pin) {
                         localStorage.setItem("usuarioPin", datos.pin);
                     }
 
-
-                    navigate('/carnet');
+                    iniciarSesion();
                     return;
                 } else {
                     setMensaje({ texto: "No estás autorizado en el sistema", tipo: "error" });
@@ -63,14 +67,12 @@ function Login() {
                 }
             } else {
                 // Modo offline: verificar coincidencia local de cédula y PIN
-                localStorage.setItem("sesion", "true")
-
                 if (cedulaTrimmed === cedulaLocal) {
                     if (pinLocal && pinTrimmed !== pinLocal) {
                         setMensaje({ texto: "PIN incorrecto en modo offline", tipo: "error" });
                         return;
                     }
-                    navigate('/carnet');
+                    iniciarSesion();
                     return;
                 } else {
                     throw new Error("Offline y usuario no coincide");
@@ -85,7 +87,7 @@ function Login() {
                     setMensaje({ texto: "PIN incorrecto", tipo: "error" });
                     return;
                 }
-                navigate('/carnet');
+                iniciarSesion();
             } else {
                 setMensaje({ texto: "Error de conexión. Verifica tu internet.", tipo: "warning" });
             }

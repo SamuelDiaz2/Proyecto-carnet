@@ -18,23 +18,21 @@ const PageLoader = () => (
   </div>
 );
 
+const ProtectedRoute = ({ sessionActive, children }) => (
+  sessionActive ? children : <Navigate to="/login" replace />
+);
+
 function App() {
-  const [sesionActiva, setSesionActiva] = useState(false);
-  const [cargando, setCargando] = useState(true);
+  const [sesionActiva, setSesionActiva] = useState(() => localStorage.getItem('sesion') === 'true');
 
   useEffect(() => {
-    const sesion = localStorage.getItem('sesion');
-    if (sesion) {
-      setSesionActiva(true);
-    } else {
-      setSesionActiva(false)
-    }
-    setCargando(false);
-  }, []);
+    const actualizarSesion = () => {
+      setSesionActiva(localStorage.getItem('sesion') === 'true');
+    };
 
-  if (cargando) {
-    return null;
-  }
+    window.addEventListener('app-session-change', actualizarSesion);
+    return () => window.removeEventListener('app-session-change', actualizarSesion);
+  }, []);
 
   return (
     <BrowserRouter>
@@ -46,12 +44,16 @@ function App() {
                 path="/"
                 element={sesionActiva ? <Navigate to="/carnet" replace /> : <Login />}
               />
-              <Route path="/opciones" element={<Opciones />} />
-              <Route path="/citas" element={<Citas />} />
-              <Route path="/carnet" element={<CarnetDigital />} />
+              <Route
+                path="/login"
+                element={sesionActiva ? <Navigate to="/carnet" replace /> : <Login />}
+              />
+              <Route path="/opciones" element={<ProtectedRoute sessionActive={sesionActiva}><Opciones /></ProtectedRoute>} />
+              <Route path="/citas" element={<ProtectedRoute sessionActive={sesionActiva}><Citas /></ProtectedRoute>} />
+              <Route path="/carnet" element={<ProtectedRoute sessionActive={sesionActiva}><CarnetDigital /></ProtectedRoute>} />
               <Route path="/profesional" element={<Profesional />} />
-              <Route path="/paciente" element={<Paciente />} />
-              <Route path="/registro" element={<Registro />} />
+              <Route path="/paciente" element={<ProtectedRoute sessionActive={sesionActiva}><Paciente /></ProtectedRoute>} />
+              <Route path="/registro" element={<ProtectedRoute sessionActive={sesionActiva}><Registro /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
