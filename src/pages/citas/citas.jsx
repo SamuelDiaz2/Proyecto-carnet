@@ -152,7 +152,7 @@ function CitasProfesional() {
             </div>
 
             <div className="citas-container">
-                <h2>Pacientes Registrados - {profesionUsuario || 'Especialidad'}</h2>
+                <h2>Pacientes de {profesionUsuario || 'Especialidad'}</h2>
 
                 {isLoadingTotal && (
                     <div className="citas-state">

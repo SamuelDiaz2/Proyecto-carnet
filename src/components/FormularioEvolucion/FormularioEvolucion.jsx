@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import SignatureCanvas from 'react-signature-canvas';
 import datosEvaluacion from './evaluacion.json';
 import datosEvolucion from './evolucion.json';
 import './formularioEvolucion.css';
@@ -9,6 +10,9 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
     const [cargando, setCargando] = useState(false);
     const [verificando, setVerificando] = useState(true);
     const [esEvaluacionInicial, setEsEvaluacionInicial] = useState(true);
+    const [firmaConfirmada, setFirmaConfirmada] = useState(false);
+
+    const firmaRef = useRef({});
 
     useEffect(() => {
         const verificarHistorial = async () => {
@@ -43,8 +47,32 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
         setFormData(prev => ({ ...prev, [id]: valor }));
     };
 
+    const limpiarFirma = () => {
+        firmaRef.current.clear();
+        setFirmaConfirmada(false);
+        const nuevoFormData = { ...formData };
+        delete nuevoFormData.firma_paciente;
+        setFormData(nuevoFormData);
+    };
+
+    const confirmarFirma = () => {
+        if (firmaRef.current.isEmpty()) {
+            alert("El lienzo de firma está vacío. Por favor, pida al paciente que firme.");
+            return;
+        }
+        const urlFirma = firmaRef.current.getTrimmedCanvas().toDataURL('image/png');
+        manejarCambio('firma_paciente', urlFirma);
+        setFirmaConfirmada(true);
+    };
+
     const guardarAtencion = async (e) => {
         e.preventDefault();
+
+        if (!firmaConfirmada) {
+            alert("Debe confirmar la firma del paciente antes de guardar el registro.");
+            return;
+        }
+
         try {
             setCargando(true);
             const cedulaProfesional = localStorage.getItem("usuarioCedula") || "";
@@ -57,17 +85,19 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
                         paciente_id: pacienteId,
                         profesional_cedula: cedulaProfesional,
                         profesion_especialidad: profesion,
-                        tipo_registro: esEvaluacionInicial ? 'evaluacion_inicial' : 'evolucion_seguimiento', // <-- RESTAURADO
+                        tipo_registro: esEvaluacionInicial ? 'evaluacion_inicial' : 'evolucion_seguimiento',
                         datos_formulario: formData
                     }
                 ]);
 
             if (error) throw error;
 
-            await supabase
-                .from('citas')
-                .update({ estado: 'completada' })
-                .eq('id', citaId);
+            if (citaId) {
+                await supabase
+                    .from('citas')
+                    .update({ estado: 'completada' })
+                    .eq('id', citaId);
+            }
 
             alert(esEvaluacionInicial ? "¡Evaluación inicial guardada con éxito!" : "¡Evolución guardada con éxito!");
             if (onGuardadoExitoso) onGuardadoExitoso();
@@ -83,7 +113,6 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
 
     const claveProfesion = profesion ? profesion.toLowerCase().replace(/á/g, 'a').replace(/í/g, 'i').replace(/\s+/g, '_') : 'fonoaudiologia';
 
-    // Navegación segura usando opcional chaining (?.) para evitar crasheos si la profesión no existe en el JSON
     const seccionesActuales = esEvaluacionInicial
         ? (datosEvaluacion.servicio?.[claveProfesion] || datosEvaluacion.servicio?.fonoaudiologia || [])
         : (datosEvolucion.evoluciones?.[claveProfesion] || datosEvolucion.evoluciones?.observaciones_clinicas || []);
@@ -130,12 +159,48 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
                                     </div>
                                 </div>
                             ))}
+
+                            <div className="firma-seccion-bloque">
+                                <h4 className="titulo-seccion-json">Firma del Paciente</h4>
+                                <div className={`firma-canvas-container ${firmaConfirmada ? 'firma-bloqueada' : ''}`}>
+                                    <SignatureCanvas
+                                        ref={firmaRef}
+                                        canvasProps={{ className: 'firma-canvas' }}
+                                    />
+                                    {firmaConfirmada && (
+                                        <div className="firma-overlay-confirmada">
+                                            <span>✓ Firma capturada</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="firma-acciones">
+                                    <button
+                                        type="button"
+                                        className="btn-limpiar-firma"
+                                        onClick={limpiarFirma}
+                                    >
+                                        Limpiar Lienzo
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn-confirmar-firma"
+                                        onClick={confirmarFirma}
+                                        disabled={firmaConfirmada}
+                                    >
+                                        {firmaConfirmada ? 'Firma Confirmada' : 'Confirmar Firma'}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="modal-actions">
                             <button type="button" className="btn-secundario" onClick={onCerrar}>Cancelar</button>
-                            <button type="submit" className="btn-guardar" disabled={cargando}>
-                                {cargando ? 'Guardando...' : 'Guardar y Finalizar Cita'}
+                            <button
+                                type="submit"
+                                className="btn-guardar"
+                                disabled={cargando || !firmaConfirmada}
+                            >
+                                {cargando ? 'Guardando...' : (citaId ? 'Guardar y Finalizar Cita' : 'Guardar Registro Clínico')}
                             </button>
                         </div>
                     </form>

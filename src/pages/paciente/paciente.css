@@ -6,7 +6,7 @@
     width: 100%;
     min-height: 100vh;
     background-color: #f8fafc;
-    padding: 30px 15px 60px 15px;
+    padding: 30px 10px 60px 10px;
     box-sizing: border-box;
 }
 
@@ -490,4 +490,160 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* =========================================
+   8. DETALLES DEL MODAL - SESIONES Y BOTONES
+========================================= */
+.sesiones-counter-box {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f0f4f8;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sesiones-counter-box span {
+    font-size: 14px;
+}
+
+.sesiones-restantes {
+    color: #d97706;
+}
+
+.registro-espontaneo-container {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.registro-espontaneo-title {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.verificando-text {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin: 5px 0 10px 0;
+}
+
+.botones-atencion-flex {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-atencion {
+    flex: 1;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.btn-evaluar {
+    background-color: #0056D2;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-evaluar:hover {
+    background-color: #0043a4;
+}
+
+.btn-evolucionar {
+    background-color: #28A745;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-evolucionar:hover {
+    background-color: #218838;
+}
+
+.btn-atencion-disabled {
+    background-color: #E0E0E0;
+    color: #9E9E9E;
+    cursor: not-allowed;
+}
+
+.btn-atencion-loading {
+    opacity: 0.5;
+}
+
+.cita-actions-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.btn-vincular {
+    flex: 1;
+    background-color: #3182ce;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-vincular:hover:not(:disabled) {
+    background-color: #2b6cb0;
+}
+
+.btn-vincular:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-cancelar {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+    background-color: #cf1322;
+}
+
+.btn-cancelar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-cancelar-full {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.btn-cancelar-full:hover:not(:disabled) {
+    background-color: #cf1322;
+}
+
+.btn-cancelar-full:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

@@ -87,8 +87,8 @@ function Professional() {
             });
             setMensajeGuardar({ texto: "¡Profesional guardado con éxito!", color: "#10b981" });
             setTimeout(() => {
-                setCedula(''); 
-                setNombre(''); 
+                setCedula('');
+                setNombre('');
                 setPin('');
                 setProfesion('');
                 setFotoBase64('');
@@ -137,7 +137,7 @@ function Professional() {
         <div className="professional-mobile-layout">
             <header className="professional-header">
                 <button onClick={() => navigate('/carnet')} className="btn-back-top" aria-label="Volver al Carnet">
-                    ← Volver
+                    Volver
                 </button>
                 <div>
                     <h1>Panel de Control</h1>

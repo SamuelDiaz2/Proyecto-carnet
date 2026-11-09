@@ -202,3 +202,91 @@
     background-color: #9ec5fe;
     cursor: not-allowed;
 }
+
+.firma-seccion-bloque {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.firma-canvas-container {
+    border: 2px dashed #cbd5e1;
+    background-color: #ffffff;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    position: relative;
+    width: 100%;
+    /* Altura fija para el lienzo para que no colapse */
+    height: 200px;
+}
+
+/* Esta clase se aplica directamente al elemento canvas generado por la librería */
+.firma-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+}
+
+/* Capa de bloqueo visual cuando la firma ya fue confirmada */
+.firma-bloqueada {
+    pointer-events: none;
+    opacity: 0.7;
+    border: 2px solid #10b981;
+}
+
+.firma-overlay-confirmada {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid #34d399;
+}
+
+.firma-acciones {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.btn-limpiar-firma {
+    background-color: #fff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-limpiar-firma:hover {
+    background-color: #f1f5f9;
+}
+
+.btn-confirmar-firma {
+    background-color: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-confirmar-firma:hover:not(:disabled) {
+    background-color: #2563eb;
+}
+
+.btn-confirmar-firma:disabled {
+    background-color: #10b981;
+    cursor: default;
+}

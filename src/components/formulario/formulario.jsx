@@ -5,15 +5,16 @@ const PROFESIONES = [
     "Fonoaudiología",
     "Fisioterapia con terapia respiratoria",
     "Fisioterapia con terapia ocupacional",
-    "Terapia ocupacional"
+    "Terapia ocupacional",
+    "Fisioterapia"
 ];
 
-export function UserForm({ 
-    cedula, setCedula, 
-    nombre, setNombre, 
+export function UserForm({
+    cedula, setCedula,
+    nombre, setNombre,
     pin, setPin,
     profesion, setProfesion,
-    onFotoChange, onSubmit, mensaje 
+    onFotoChange, onSubmit, mensaje
 }) {
     return (
         <form className="admin-form" onSubmit={onSubmit}>
