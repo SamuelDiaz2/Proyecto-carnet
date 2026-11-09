@@ -647,3 +647,155 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.reasignacion-paciente {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.btn-reasignar-paciente {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-reasignar-paciente:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.reasignacion-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.reasignacion-modal {
+    width: 100%;
+    max-width: 440px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.reasignacion-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.reasignacion-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.15rem;
+}
+
+.reasignacion-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.reasignacion-cerrar {
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.reasignacion-contenido {
+    display: grid;
+    gap: 10px;
+    padding: 20px 22px;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.reasignacion-contenido label {
+    color: #334155;
+    font-weight: 600;
+}
+
+.reasignacion-contenido select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    font: inherit;
+}
+
+.reasignacion-error {
+    color: #b91c1c;
+}
+
+.reasignacion-error p {
+    margin-bottom: 8px;
+}
+
+.reasignacion-error button {
+    padding: 7px 12px;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    background: #fef2f2;
+    color: #991b1b;
+    cursor: pointer;
+}
+
+.reasignacion-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 22px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.reasignacion-acciones button {
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reasignacion-cancelar {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+}
+
+.reasignacion-confirmar {
+    border: 0;
+    background: #04b046;
+    color: #ffffff;
+}
+
+.reasignacion-confirmar:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}

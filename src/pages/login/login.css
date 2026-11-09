@@ -19,6 +19,18 @@
     box-sizing: border-box;
 }
 
+.account-details-form {
+    max-width: 520px;
+}
+
+.account-details-description {
+    margin: -12px 0 24px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
 .login-title {
     margin: 0 0 24px 0;
     font-size: 24px;
@@ -56,6 +68,38 @@
     box-shadow: 0 0 0 3px rgba(4, 176, 70, 0.15);
 }
 
+.account-signature-container {
+    overflow: hidden;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 8px;
+    background-color: #f8fafc;
+}
+
+.account-signature-canvas {
+    display: block;
+    width: 100%;
+    height: 210px;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+.account-signature-hint {
+    display: block;
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.account-signature-clear {
+    margin-top: 8px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 6px;
+    background-color: #e2e8f0;
+    color: #334155;
+    cursor: pointer;
+}
+
 .login-message {
     font-size: 14px;
     margin: 0 0 14px 0;
@@ -90,6 +134,11 @@
 
 .btn-primary:hover {
     background-color: #038f38;
+}
+
+.btn-primary:disabled {
+    background-color: #94a3b8;
+    cursor: wait;
 }
 
 .btn-primary:active {

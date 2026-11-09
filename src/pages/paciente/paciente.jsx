@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../lib/firebaseConfig';
 import SideMenu from '../../components/side-menu/side-menu.jsx';
 import { coincideProfesionCita } from '../../utils/filterServices.js';
 import FormularioEvolucion from '../../components/FormularioEvolucion/FormularioEvolucion.jsx';
@@ -7,6 +9,7 @@ import './paciente.css';
 
 function Pacientes() {
     const [citas, setCitas] = useState([]);
+    const [profesionalesAsignados, setProfesionalesAsignados] = useState({});
     const [conteoEvoluciones, setConteoEvoluciones] = useState({}); // Nuevo estado para llevar el conteo real
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,6 +21,21 @@ function Pacientes() {
 
     const [citaAtendiendo, setCitaAtendiendo] = useState(null);
     const [estadoEvaluacionPaciente, setEstadoEvaluacionPaciente] = useState(null);
+    const [registroPaciente, setRegistroPaciente] = useState({
+        pacienteId: null,
+        profesional: '',
+        servicio: '',
+        cargando: false,
+        error: null
+    });
+    const [profesionalesDisponibles, setProfesionalesDisponibles] = useState([]);
+    const [cargandoProfesionales, setCargandoProfesionales] = useState(false);
+    const [errorProfesionales, setErrorProfesionales] = useState(null);
+    const [mostrarReasignacion, setMostrarReasignacion] = useState(false);
+    const [profesionalDestino, setProfesionalDestino] = useState('');
+    const [reassignando, setReassignando] = useState(false);
+    const [reintentarProfesionales, setReintentarProfesionales] = useState(0);
+    const [reintentarRegistro, setReintentarRegistro] = useState(0);
 
     const miNombre = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
     const profesionUsuario = localStorage.getItem("usuarioProfesion") || "";
@@ -29,42 +47,117 @@ function Pacientes() {
     }, []);
 
     useEffect(() => {
+        setMostrarReasignacion(false);
+        setProfesionalDestino('');
+    }, [pacienteSeleccionado?.id]);
+
+    useEffect(() => {
+        if (!esAdmin) return;
+
+        let activo = true;
+        const cargarProfesionales = async () => {
+            try {
+                setCargandoProfesionales(true);
+                setErrorProfesionales(null);
+                const resultado = await getDocs(
+                    query(collection(db, 'autorizados'), where('rol', '==', 'profesional'))
+                );
+                const lista = resultado.docs.map(profesional => ({
+                    id: profesional.id,
+                    ...profesional.data()
+                }));
+
+                if (activo) setProfesionalesDisponibles(lista);
+            } catch (err) {
+                console.error('Error al cargar profesionales disponibles:', err);
+                if (activo) setErrorProfesionales('No se pudieron cargar los profesionales. Intenta de nuevo.');
+            } finally {
+                if (activo) setCargandoProfesionales(false);
+            }
+        };
+
+        cargarProfesionales();
+        return () => {
+            activo = false;
+        };
+    }, [esAdmin, reintentarProfesionales]);
+
+    useEffect(() => {
+        let activo = true;
+
         const verificarEvaluacionPrevia = async () => {
             if (!pacienteSeleccionado) {
                 setEstadoEvaluacionPaciente(null);
+                setRegistroPaciente({
+                    pacienteId: null,
+                    profesional: '',
+                    servicio: '',
+                    cargando: false,
+                    error: null
+                });
                 return;
             }
+
+            let registroCargado = false;
+            setEstadoEvaluacionPaciente(null);
+            setRegistroPaciente({
+                pacienteId: null,
+                profesional: '',
+                servicio: '',
+                cargando: true,
+                error: null
+            });
+
             try {
                 const documentoBuscado = String(pacienteSeleccionado.identificacion || '').trim();
                 const { data: pacienteDb, error: errPac } = await supabase
                     .from('pacientes')
-                    .select('id')
+                    .select('id, profesional, servicio_principal')
                     .eq('numero_identificacion', documentoBuscado)
                     .limit(1);
 
-                if (errPac || !pacienteDb || pacienteDb.length === 0) {
-                    setEstadoEvaluacionPaciente(false);
-                    return;
+                if (errPac) throw errPac;
+                if (!pacienteDb || pacienteDb.length === 0) throw new Error('No se encontró el registro del paciente.');
+
+                const registro = pacienteDb[0];
+                registroCargado = true;
+                if (activo) {
+                    setRegistroPaciente({
+                        pacienteId: registro.id,
+                        profesional: registro.profesional || '',
+                        servicio: registro.servicio_principal || pacienteSeleccionado.citas.find(c => c.servicio)?.servicio || '',
+                        cargando: false,
+                        error: null
+                    });
                 }
 
                 const { count, error: errEvo } = await supabase
                     .from('evoluciones_atencion')
                     .select('*', { count: 'exact', head: true })
-                    .eq('paciente_id', pacienteDb[0].id);
+                    .eq('paciente_id', registro.id);
 
-                if (!errEvo && count > 0) {
-                    setEstadoEvaluacionPaciente(true);
-                } else {
-                    setEstadoEvaluacionPaciente(false);
+                if (errEvo) throw errEvo;
+                if (activo) setEstadoEvaluacionPaciente(count > 0);
+            } catch (err) {
+                console.error("Error verificando el registro clínico:", err);
+                if (activo) {
+                    setEstadoEvaluacionPaciente('error');
+                    if (!registroCargado) {
+                        setRegistroPaciente(prev => ({
+                            ...prev,
+                            cargando: false,
+                            error: err.message || 'No se pudo consultar el registro del paciente.'
+                        }));
+                    }
                 }
-            } catch (error) {
-                console.error("Error verificando evaluación:", error);
-                setEstadoEvaluacionPaciente(false);
             }
         };
 
         verificarEvaluacionPrevia();
-    }, [pacienteSeleccionado]);
+        return () => {
+            activo = false;
+        };
+    }, [pacienteSeleccionado, reintentarRegistro]);
 
     // MODIFICADO: Ahora extrae el conteo real de evoluciones hechas a los pacientes
     const cargarCitas = async () => {
@@ -75,14 +168,23 @@ function Pacientes() {
             // Hacemos las peticiones en paralelo para mayor rapidez
             const [citasRes, pacientesRes, evolucionesRes] = await Promise.all([
                 supabase.from('citas').select('*').order('fecha', { ascending: true }),
-                supabase.from('pacientes').select('id, numero_identificacion'),
+                supabase.from('pacientes').select('id, numero_identificacion, profesional'),
                 supabase.from('evoluciones_atencion').select('paciente_id')
             ]);
 
             if (citasRes.error) throw citasRes.error;
+            if (pacientesRes.error) throw pacientesRes.error;
 
             // Mapeamos cuantas evoluciones reales tiene cada paciente por su número de identificación
             const mapaEvo = {};
+            const mapaProfesionales = {};
+            if (!pacientesRes.error && pacientesRes.data) {
+                pacientesRes.data.forEach(paciente => {
+                    if (paciente.numero_identificacion) {
+                        mapaProfesionales[String(paciente.numero_identificacion).trim()] = paciente.profesional || '';
+                    }
+                });
+            }
             if (!pacientesRes.error && !evolucionesRes.error && pacientesRes.data && evolucionesRes.data) {
                 pacientesRes.data.forEach(p => {
                     if (p.numero_identificacion) {
@@ -93,6 +195,7 @@ function Pacientes() {
             }
 
             setConteoEvoluciones(mapaEvo);
+            setProfesionalesAsignados(mapaProfesionales);
             setCitas(citasRes.data || []);
         } catch (err) {
             console.error('Error al cargar datos:', err);
@@ -106,7 +209,11 @@ function Pacientes() {
         const grupos = {};
 
         citas.forEach(cita => {
-            const nombreCitaNormalizado = (cita.profesional || '').trim().toLowerCase();
+            const documento = String(cita.identificacion || '').trim();
+            const profesionalAsignado = Object.prototype.hasOwnProperty.call(profesionalesAsignados, documento)
+                ? profesionalesAsignados[documento]
+                : cita.profesional || '';
+            const nombreCitaNormalizado = profesionalAsignado.trim().toLowerCase();
             const miNombreNormalizado = (miNombre || '').trim().toLowerCase();
 
             const esMia = nombreCitaNormalizado === miNombreNormalizado;
@@ -114,8 +221,8 @@ function Pacientes() {
 
             if (!esMia && !correspondeEspecialidad) return;
 
-            const key = (cita.identificacion && cita.identificacion.trim())
-                ? cita.identificacion.trim()
+            const key = documento
+                ? documento
                 : (cita.nombre_paciente ? cita.nombre_paciente.trim().toLowerCase() : 'desconocido');
 
             if (!grupos[key]) {
@@ -127,9 +234,11 @@ function Pacientes() {
                     municipio: cita.municipio_ciudad || '',
                     barrio: cita.barrio_localidad || '',
                     direccion: cita.direccion_atencion || '',
+                    profesional: profesionalAsignado,
                     citas: []
                 };
             }
+            if (profesionalAsignado) grupos[key].profesional = profesionalAsignado;
             grupos[key].citas.push(cita);
         });
 
@@ -138,7 +247,9 @@ function Pacientes() {
             const citasAtendidas = paciente.citas.filter(c => c.estado === 'completada');
 
             const miNombreNormalizado = (miNombre || '').trim().toLowerCase();
-            const asignadoAMi = paciente.citas.some(c => (c.profesional || '').trim().toLowerCase() === miNombreNormalizado);
+            const asignadoAMi = paciente.profesional
+                ? paciente.profesional.trim().toLowerCase() === miNombreNormalizado
+                : paciente.citas.some(c => (c.profesional || '').trim().toLowerCase() === miNombreNormalizado);
 
             const sesionesTotales = 10;
 
@@ -159,7 +270,7 @@ function Pacientes() {
                 sesionesRestantes
             };
         });
-    }, [citas, conteoEvoluciones, miNombre, profesionUsuario, esAdmin]);
+    }, [citas, conteoEvoluciones, profesionalesAsignados, miNombre, profesionUsuario, esAdmin]);
 
     const pacientesFiltrados = useMemo(() => {
         return pacientesAgrupados.filter(p => {
@@ -235,6 +346,108 @@ function Pacientes() {
             alert('Hubo un error de conexión al verificar el paciente.');
         } finally {
             if (cita) setActualizandoCitaId(null);
+        }
+    };
+
+    const profesionalesDestino = useMemo(() => {
+        if (!registroPaciente.servicio) return [];
+
+        const asignadoActual = registroPaciente.profesional.trim().toLowerCase();
+        return profesionalesDisponibles
+            .filter(profesional =>
+                profesional.nombre &&
+                profesional.profesion &&
+                profesional.nombre.trim().toLowerCase() !== asignadoActual &&
+                coincideProfesionCita(
+                    { servicio: registroPaciente.servicio },
+                    profesional.profesion
+                )
+            )
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    }, [profesionalesDisponibles, registroPaciente]);
+
+    const handleReasignarPaciente = async () => {
+        if (!esAdmin || !registroPaciente.pacienteId || !pacienteSeleccionado || reassignando) return;
+
+        const destino = profesionalesDestino.find(profesional => profesional.id === profesionalDestino);
+        if (!destino) {
+            alert('Selecciona un profesional de la misma especialidad.');
+            return;
+        }
+
+        try {
+            setReassignando(true);
+            const { data: asignacionActual, error: errorConsulta } = await supabase
+                .from('pacientes')
+                .select('profesional')
+                .eq('id', registroPaciente.pacienteId)
+                .single();
+
+            if (errorConsulta) throw errorConsulta;
+
+            const profesionalActual = asignacionActual.profesional;
+            let actualizacion = supabase
+                .from('pacientes')
+                .update({ profesional: destino.nombre })
+                .eq('id', registroPaciente.pacienteId);
+
+            actualizacion = profesionalActual == null
+                ? actualizacion.is('profesional', null)
+                : actualizacion.eq('profesional', profesionalActual);
+
+            const { data: pacienteActualizado, error: errorPaciente } = await actualizacion
+                .select('id')
+                .maybeSingle();
+
+            if (errorPaciente) throw errorPaciente;
+            if (!pacienteActualizado) {
+                throw new Error('La asignación cambió mientras tenías abierta la ficha. Ciérrala y vuelve a intentarlo.');
+            }
+
+            const documento = String(pacienteSeleccionado.identificacion || '').trim();
+            const { error: errorCitas } = await supabase
+                .from('citas')
+                .update({ profesional: destino.nombre })
+                .eq('identificacion', documento)
+                .in('estado', ['pendiente', 'confirmada']);
+
+            if (errorCitas) {
+                await cargarCitas();
+                throw new Error('El profesional del paciente se actualizó, pero no se pudieron actualizar sus citas pendientes. Recarga e inténtalo de nuevo.');
+            }
+
+            setProfesionalesAsignados(prev => ({ ...prev, [documento]: destino.nombre }));
+            setCitas(prev => prev.map(cita =>
+                String(cita.identificacion || '').trim() === documento &&
+                    (cita.estado === 'pendiente' || cita.estado === 'confirmada')
+                    ? { ...cita, profesional: destino.nombre }
+                    : cita
+            ));
+            setRegistroPaciente(prev => ({ ...prev, profesional: destino.nombre }));
+            setPacienteSeleccionado(prev => {
+                if (!prev) return null;
+                return {
+                    ...prev,
+                    profesional: destino.nombre,
+                    citas: prev.citas.map(cita =>
+                        cita.estado === 'pendiente' || cita.estado === 'confirmada'
+                            ? { ...cita, profesional: destino.nombre }
+                            : cita
+                    ),
+                    citasPendientes: prev.citasPendientes.map(cita => ({
+                        ...cita,
+                        profesional: destino.nombre
+                    }))
+                };
+            });
+            setMostrarReasignacion(false);
+            setProfesionalDestino('');
+            alert(`Paciente reasignado a ${destino.nombre}.`);
+        } catch (err) {
+            console.error('Error al reasignar paciente:', err);
+            alert(`No se pudo completar la reasignación: ${err.message}`);
+        } finally {
+            setReassignando(false);
         }
     };
 
@@ -372,6 +585,39 @@ function Pacientes() {
                                 {pacienteSeleccionado.direccion && <p><strong>Dirección:</strong> {pacienteSeleccionado.direccion}</p>}
                                 {pacienteSeleccionado.municipio && <p><strong>Ciudad/Municipio:</strong> {pacienteSeleccionado.municipio}</p>}
 
+                                {esAdmin && (
+                                    <div className="reasignacion-paciente">
+                                        <div>
+                                            <strong>Profesional asignado:</strong>{' '}
+                                            {registroPaciente.cargando
+                                                ? 'Consultando...'
+                                                : registroPaciente.profesional || 'Sin asignar'}
+                                            {registroPaciente.error && (
+                                                <div className="reasignacion-error">
+                                                    <p>{registroPaciente.error}</p>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setReintentarRegistro(prev => prev + 1)}
+                                                    >
+                                                        Reintentar
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="btn-reasignar-paciente"
+                                            disabled={registroPaciente.cargando || Boolean(registroPaciente.error) || !registroPaciente.pacienteId}
+                                            onClick={() => {
+                                                setProfesionalDestino('');
+                                                setMostrarReasignacion(true);
+                                            }}
+                                        >
+                                            {registroPaciente.profesional ? 'Reasignar profesional' : 'Asignar profesional'}
+                                        </button>
+                                    </div>
+                                )}
+
                                 <div className="sesiones-counter-box">
                                     <span>🎯 <strong>Totales:</strong> {pacienteSeleccionado.sesionesTotales || 10}</span>
                                     {/* Muestra las sesiones reales sacadas de la BD */}
@@ -384,6 +630,16 @@ function Pacientes() {
 
                                     {estadoEvaluacionPaciente === null ? (
                                         <p className="verificando-text">Verificando historial clínico...</p>
+                                    ) : estadoEvaluacionPaciente === 'error' ? (
+                                        <div className="reasignacion-error">
+                                            <p>No se pudo verificar el historial clínico.</p>
+                                            <button
+                                                type="button"
+                                                onClick={() => setReintentarRegistro(prev => prev + 1)}
+                                            >
+                                                Reintentar
+                                            </button>
+                                        </div>
                                     ) : (
                                         <div className="botones-atencion-flex">
                                             <button
@@ -481,6 +737,95 @@ function Pacientes() {
                             </button>
                         </footer>
                     </div>
+
+                    {mostrarReasignacion && esAdmin && (
+                        <div
+                            className="reasignacion-overlay"
+                            onClick={event => {
+                                event.stopPropagation();
+                                setMostrarReasignacion(false);
+                            }}
+                        >
+                            <section
+                                className="reasignacion-modal"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="reasignacion-titulo"
+                                onClick={event => event.stopPropagation()}
+                            >
+                                <header className="reasignacion-header">
+                                    <div>
+                                        <h2 id="reasignacion-titulo">
+                                            {registroPaciente.profesional ? 'Reasignar paciente' : 'Asignar profesional'}
+                                        </h2>
+                                        <p>{pacienteSeleccionado.nombre}</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="reasignacion-cerrar"
+                                        aria-label="Cerrar"
+                                        onClick={() => setMostrarReasignacion(false)}
+                                    >
+                                        ✕
+                                    </button>
+                                </header>
+
+                                <div className="reasignacion-contenido">
+                                    <label htmlFor="profesional-destino">
+                                        Profesional de {registroPaciente.servicio || 'la misma especialidad'}
+                                    </label>
+                                    {cargandoProfesionales ? (
+                                        <p>Cargando profesionales...</p>
+                                    ) : errorProfesionales ? (
+                                        <div className="reasignacion-error">
+                                            <p>{errorProfesionales}</p>
+                                            <button
+                                                type="button"
+                                                onClick={() => setReintentarProfesionales(prev => prev + 1)}
+                                            >
+                                                Reintentar
+                                            </button>
+                                        </div>
+                                    ) : profesionalesDestino.length === 0 ? (
+                                        <p>No hay otros profesionales disponibles para esta especialidad.</p>
+                                    ) : (
+                                        <select
+                                            id="profesional-destino"
+                                            value={profesionalDestino}
+                                            onChange={event => setProfesionalDestino(event.target.value)}
+                                        >
+                                            <option value="">Selecciona un profesional...</option>
+                                            {profesionalesDestino.map(profesional => (
+                                                <option key={profesional.id} value={profesional.id}>
+                                                    {profesional.nombre} — {profesional.profesion}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )}
+                                </div>
+
+                                <footer className="reasignacion-acciones">
+                                    <button
+                                        type="button"
+                                        className="reasignacion-cancelar"
+                                        onClick={() => setMostrarReasignacion(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="reasignacion-confirmar"
+                                        disabled={!profesionalDestino || cargandoProfesionales || Boolean(errorProfesionales) || reassignando}
+                                        onClick={handleReasignarPaciente}
+                                    >
+                                        {reassignando
+                                            ? 'Guardando...'
+                                            : registroPaciente.profesional ? 'Reasignar' : 'Asignar'}
+                                    </button>
+                                </footer>
+                            </section>
+                        </div>
+                    )}
                 </div>
             )}
 

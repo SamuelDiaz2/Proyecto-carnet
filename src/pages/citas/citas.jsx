@@ -17,6 +17,7 @@ function CitasProfesional() {
     const [profesionUsuario, setProfesionUsuario] = useState(localStorage.getItem("usuarioProfesion") || "");
     const nombreProfesional = localStorage.getItem("usuarioNombre") || "Profesional Asignado";
     const cedulaUsuario = localStorage.getItem("usuarioCedula") || "";
+    const esAdmin = cedulaUsuario === "1028862517" || cedulaUsuario === "1073519428";
 
     useEffect(() => {
         const iniciarCarga = async () => {
@@ -72,17 +73,55 @@ function CitasProfesional() {
                 return;
             }
 
+            const profesionalAsignado = (paciente.profesional || '').trim();
+            if (profesionalAsignado) {
+                alert(esAdmin
+                    ? 'Para reasignar este paciente, abre su ficha en el Directorio de Pacientes.'
+                    : `Este paciente ya está asignado a ${profesionalAsignado}.`);
+                return;
+            }
+
             setActualizandoId(paciente.id);
 
-            // 1. Actualizamos la tabla 'pacientes'
-            const { error: updateError } = await supabase
+            const { data: asignacionActual, error: errorConsulta } = await supabase
+                .from('pacientes')
+                .select('profesional')
+                .eq('id', paciente.id)
+                .single();
+
+            if (errorConsulta) throw errorConsulta;
+
+            const profesionalActual = asignacionActual.profesional;
+            if (profesionalActual && profesionalActual.trim()) {
+                setPacientes(prev =>
+                    prev.map(p =>
+                        p.id === paciente.id ? { ...p, profesional: profesionalActual } : p
+                    )
+                );
+                alert(esAdmin
+                    ? 'Este paciente ya está asignado. Para reasignarlo, abre su ficha en el Directorio de Pacientes.'
+                    : `Este paciente ya está asignado a ${profesionalActual}.`);
+                return;
+            }
+
+            let actualizacion = supabase
                 .from('pacientes')
                 .update({ profesional: nombreProfesional })
                 .eq('id', paciente.id);
+            actualizacion = profesionalActual == null
+                ? actualizacion.is('profesional', null)
+                : actualizacion.eq('profesional', profesionalActual);
 
-            if (updateError) throw updateError;
+            const { data: pacienteActualizado, error: errorActualizacion } = await actualizacion
+                .select('id')
+                .maybeSingle();
 
-            // 2. Creamos la cita automática para que salte a 'Mis Pacientes'
+            if (errorActualizacion) throw errorActualizacion;
+            if (!pacienteActualizado) {
+                throw new Error('Otro usuario asignó este paciente primero. Actualiza la lista e inténtalo de nuevo.');
+            }
+
+            // Creamos la cita para que aparezca en "Mis Pacientes".
             const fechaHoy = new Date().toISOString().split('T')[0];
             const horaActual = new Date().toTimeString().split(' ')[0];
 
@@ -106,7 +145,6 @@ function CitasProfesional() {
 
             if (citaError) throw citaError;
 
-            // 3. Actualizamos la vista localmente
             setPacientes(prev =>
                 prev.map(p =>
                     p.id === paciente.id ? { ...p, profesional: nombreProfesional } : p
@@ -176,7 +214,11 @@ function CitasProfesional() {
 
                 {!isLoadingTotal && !error && pacientesFiltrados.length > 0 && (
                     <div className="citas-grid">
-                        {pacientesFiltrados.map((paciente) => (
+                        {pacientesFiltrados.map((paciente) => {
+                            const profesionalAsignado = (paciente.profesional || '').trim();
+                            const asignadoAMi = profesionalAsignado.toLowerCase() === nombreProfesional.trim().toLowerCase();
+
+                            return (
                             <div key={paciente.id} className="cita-card">
                                 <div className="cita-header">
                                     <span className="cita-estado confirmada">
@@ -245,23 +287,26 @@ function CitasProfesional() {
 
                                     <div className="cita-acciones">
                                         <button
-                                            className={`btn-seleccionar ${paciente.profesional === nombreProfesional ? 'btn-asignado-propio' : ''}`}
-                                            disabled={actualizandoId === paciente.id}
+                                            className={`btn-seleccionar ${asignadoAMi ? 'btn-asignado-propio' : ''}`}
+                                            disabled={actualizandoId === paciente.id || Boolean(profesionalAsignado)}
                                             onClick={() => handleAsignarsePaciente(paciente)}
                                         >
                                             {actualizandoId === paciente.id
                                                 ? 'Actualizando...'
-                                                : paciente.profesional === nombreProfesional
-                                                    ? '✓ Asignado a Ti'
-                                                    : paciente.profesional
-                                                        ? 'Reasignar a Mí'
-                                                        : 'Asignarme este Paciente'}
+                                                : profesionalAsignado
+                                                    ? esAdmin
+                                                        ? `Asignado a ${profesionalAsignado} · Reasignar en Directorio`
+                                                        : asignadoAMi
+                                                            ? '✓ Asignado a Ti'
+                                                            : `Asignado a ${profesionalAsignado}`
+                                                    : 'Asignarme este Paciente'}
                                         </button>
                                     </div>
 
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>

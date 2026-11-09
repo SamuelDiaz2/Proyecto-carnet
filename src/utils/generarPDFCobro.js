@@ -62,8 +62,8 @@ export const generarPDFCobro = (profesional, atencionesAgrupadas, tarifaPorSesio
         },
         body: [
             ['Nombre', profesional.nombre || '', 'C.C / NIT', profesional.cedula || ''],
-            ['Dirección', '', 'Teléfono', ''],
-            ['Ciudad', '', 'Fecha', fechaCorte],
+            ['Dirección', '', 'Teléfono', profesional.telefono || ''],
+            ['Ciudad', profesional.ciudad || '', 'Fecha', fechaCorte],
             ['Banco', profesional.banco || '', 'No. Cuenta', profesional.numeroCuenta || '']
         ],
     });
@@ -115,6 +115,10 @@ export const generarPDFCobro = (profesional, atencionesAgrupadas, tarifaPorSesio
     docPDF.rect(14, docPDF.lastAutoTable.finalY + 25, 182, 7, 'F');
     docPDF.setFont("helvetica", "bold");
     docPDF.text("Firma y cédula del profesional", 105, docPDF.lastAutoTable.finalY + 30, { align: "center" });
+
+    if (profesional.firma?.startsWith('data:image/png;base64,')) {
+        docPDF.addImage(profesional.firma, 'PNG', 75, docPDF.lastAutoTable.finalY + 36, 60, 18);
+    }
 
     docPDF.line(60, docPDF.lastAutoTable.finalY + 65, 150, docPDF.lastAutoTable.finalY + 65);
     docPDF.setFont("helvetica", "normal");
