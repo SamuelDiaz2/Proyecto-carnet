@@ -1,6 +1,7 @@
 import React from 'react';
 
-export function UserTable({ usuarios, onEliminarClick, confirmarEliminar, ejecutarEliminacion, setConfirmarEliminar }) {
+// Fíjate que aquí también debes recibir la nueva función 'onGenerarCobro'
+export function UserTable({ usuarios, onEliminarClick, confirmarEliminar, ejecutarEliminacion, setConfirmarEliminar, onGenerarCobro }) {
     return (
         <div className="table-section-container">
             {confirmarEliminar.visible && (
@@ -20,7 +21,7 @@ export function UserTable({ usuarios, onEliminarClick, confirmarEliminar, ejecut
                             <th>Documento</th>
                             <th>Nombre</th>
                             <th>Profesión</th>
-                            <th>Acción</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,13 +32,24 @@ export function UserTable({ usuarios, onEliminarClick, confirmarEliminar, ejecut
                                 <td className="table-profession" data-label="Profesión">
                                     <span className="profession-tag">{usuario.profesion || "No especificada"}</span>
                                 </td>
-                                <td data-label="Acción">
-                                    <button
-                                        className="btn-table-delete"
-                                        onClick={() => onEliminarClick(usuario.id, usuario.nombre)}
-                                    >
-                                        Borrar
-                                    </button>
+                                <td className="acciones-celda" data-label="Acciones">
+                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                        <button
+                                            className="btn-borrar-usuario"
+                                            // Corrección: onEliminarClick directamente, sin 'props.'
+                                            onClick={() => onEliminarClick(usuario.id, usuario.nombre)}
+                                        >
+                                            Borrar
+                                        </button>
+
+                                        <button
+                                            className="btn-generar-pdf"
+                                            // Corrección: onGenerarCobro directamente, sin 'props.'
+                                            onClick={() => onGenerarCobro(usuario)}
+                                        >
+                                            📄 Cobro
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

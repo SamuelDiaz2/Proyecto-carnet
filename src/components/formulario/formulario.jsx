@@ -14,7 +14,7 @@ export function UserForm({
     nombre, setNombre,
     pin, setPin,
     profesion, setProfesion,
-    onFotoChange, onSubmit, mensaje
+    onFotoChange, banco, setBanco, numeroCuenta, setNumeroCuenta, onSubmit, mensaje
 }) {
     return (
         <form className="admin-form" onSubmit={onSubmit}>
@@ -78,6 +78,29 @@ export function UserForm({
                     type="file"
                     accept="image/*"
                     onChange={onFotoChange}
+                />
+            </div>
+
+            <div className="admin-form-group">
+                <label>Entidad Bancaria *</label>
+                <select value={banco} onChange={(e) => setBanco(e.target.value)} required className="admin-select">
+                    <option value="" disabled>Seleccione un banco...</option>
+                    <option value="Nequi">Nequi</option>
+                    <option value="Bancolombia">Bancolombia</option>
+                    <option value="Davivienda">Davivienda</option>
+                    <option value="Daviplata">Daviplata</option>
+                    <option value="Bre-B">Bre-B</option>
+                </select>
+            </div>
+
+            <div className="admin-form-group">
+                <label>Número de Cuenta *</label>
+                <input
+                    type="number"
+                    value={numeroCuenta}
+                    onChange={(e) => setNumeroCuenta(e.target.value)}
+                    placeholder="Ej: 3124567890"
+                    required
                 />
             </div>
 

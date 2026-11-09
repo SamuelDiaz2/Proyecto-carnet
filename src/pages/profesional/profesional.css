@@ -383,6 +383,21 @@
     cursor: pointer;
 }
 
+.btn-generar-pdf {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.btn-generar-pdf:hover {
+    background-color: #2b6cb0;
+}
+
 /* ==========================================================================
    5. ESCALADO DE DISEÑO PARA PANTALLAS GRANDES (PC / TABLETS)
    ========================================================================== */

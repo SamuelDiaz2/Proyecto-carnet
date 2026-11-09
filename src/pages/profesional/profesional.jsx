@@ -4,6 +4,10 @@ import { db, auth } from '../../lib/firebaseConfig';
 import { collection, doc, setDoc, deleteDoc, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 
+import { supabase } from '../../lib/supabaseClient';
+
+import { generarPDFCobro } from '../../utils/generarPDFCobro';
+
 import { BadgePreview } from '../../components/badgepreview/badgepreview';
 import { UserForm } from '../../components/formulario/formulario';
 import { UserTable } from '../../components/tablausuarios/tablausuarios';
@@ -22,6 +26,11 @@ function Professional() {
     const [nombre, setNombre] = useState('');
     const [pin, setPin] = useState('');
     const [profesion, setProfesion] = useState('');
+
+    // NUEVOS ESTADOS BANCARIOS
+    const [banco, setBanco] = useState('');
+    const [numeroCuenta, setNumeroCuenta] = useState('');
+
     const [fotoBase64, setFotoBase64] = useState('');
     const [mensajeGuardar, setMensajeGuardar] = useState({ texto: '', color: '' });
     const [confirmarEliminar, setConfirmarEliminar] = useState({ visible: false, id: null, nombre: '' });
@@ -59,7 +68,6 @@ function Professional() {
         const archivo = e.target.files[0];
         if (archivo) {
             try {
-                // Comprime la imagen automáticamente para móviles a <50KB
                 const compressed = await compressImage(archivo, 450, 450, 0.75);
                 setFotoBase64(compressed);
             } catch (err) {
@@ -70,7 +78,7 @@ function Professional() {
 
     const handleGuardarUsuario = async (e) => {
         e.preventDefault();
-        if (!cedula.trim() || !nombre.trim() || !pin.trim() || !profesion.trim()) {
+        if (!cedula.trim() || !nombre.trim() || !pin.trim() || !profesion.trim() || !banco.trim() || !numeroCuenta.trim()) {
             setMensajeGuardar({ texto: "Todos los campos obligatorios (*) deben completarse", color: "#ef4444" });
             return;
         }
@@ -81,17 +89,16 @@ function Professional() {
                 cedula: cedula.trim(),
                 pin: pin.trim(),
                 profesion: profesion.trim(),
+                banco: banco.trim(),
+                numeroCuenta: numeroCuenta.trim(),
                 rol: "profesional",
                 fotoUrl: fotoBase64 || "",
                 fecha: new Date()
             });
             setMensajeGuardar({ texto: "¡Profesional guardado con éxito!", color: "#10b981" });
             setTimeout(() => {
-                setCedula('');
-                setNombre('');
-                setPin('');
-                setProfesion('');
-                setFotoBase64('');
+                setCedula(''); setNombre(''); setPin(''); setProfesion('');
+                setBanco(''); setNumeroCuenta(''); setFotoBase64('');
                 setMensajeGuardar({ texto: '', color: '' });
                 const fileInput = document.getElementById('carnet-file');
                 if (fileInput) fileInput.value = "";
@@ -110,6 +117,67 @@ function Professional() {
             console.error("Error al eliminar:", error);
         }
     };
+
+    const generarCuentaCobro = async (profesional) => {
+        try {
+            // 1. Buscamos todas las evoluciones realizadas por este profesional en Supabase
+            // NOTA: Si en el futuro quieres filtrar por fechas (solo los últimos 15 días), 
+            // se agregaría un .gte('fecha_registro', fechaInicio) aquí.
+            const { data: atenciones, error: errAtenciones } = await supabase
+                .from('evoluciones_atencion')
+                .select('paciente_id')
+                .eq('profesional_cedula', profesional.cedula);
+
+            if (errAtenciones) throw errAtenciones;
+
+            if (!atenciones || atenciones.length === 0) {
+                alert(`El profesional ${profesional.nombre} no tiene evoluciones o evaluaciones registradas.`);
+                return;
+            }
+
+
+            const idsPacientesUnicos = [...new Set(atenciones.map(a => a.paciente_id))];
+
+
+            const { data: pacientesData, error: errPacientes } = await supabase
+                .from('pacientes')
+                .select('id, nombre_completo')
+                .in('id', idsPacientesUnicos);
+
+            if (errPacientes) throw errPacientes;
+
+
+            const mapaNombresPacientes = {};
+            pacientesData.forEach(p => {
+                mapaNombresPacientes[p.id] = p.nombre_completo;
+            });
+
+
+            const resumenAtenciones = {};
+            atenciones.forEach(atencion => {
+                const nombrePaciente = mapaNombresPacientes[atencion.paciente_id] || 'Paciente Sin Nombre';
+                if (!resumenAtenciones[nombrePaciente]) {
+                    resumenAtenciones[nombrePaciente] = 0;
+                }
+                resumenAtenciones[nombrePaciente] += 1;
+            });
+
+            // Convertir el resumen en un arreglo apto para nuestra utilidad PDF
+            const atencionesParaPDF = Object.keys(resumenAtenciones).map(nombre => ({
+                paciente: nombre,
+                cantidad: resumenAtenciones[nombre]
+            }));
+
+            // 6. Generar el PDF enviándole los datos procesados 
+            // (puedes cambiar el 28000 por la tarifa real que manejen)
+            generarPDFCobro(profesional, atencionesParaPDF, 28000);
+
+        } catch (error) {
+            console.error("Error al recopilar datos para el cobro:", error);
+            alert("Hubo un error al generar la cuenta de cobro. Revisa la conexión a la base de datos.");
+        }
+    };
+
 
     if (!usuarioLogueado) {
         return (
@@ -151,11 +219,14 @@ function Professional() {
             <main className="professional-content-stream">
                 <section className="admin-card-section">
                     <h2>1. Registrar Profesional</h2>
+                    {/* SE PASAN LOS NUEVOS CAMPOS AL FORMULARIO */}
                     <UserForm
                         cedula={cedula} setCedula={setCedula}
                         nombre={nombre} setNombre={setNombre}
                         pin={pin} setPin={setPin}
                         profesion={profesion} setProfesion={setProfesion}
+                        banco={banco} setBanco={setBanco}
+                        numeroCuenta={numeroCuenta} setNumeroCuenta={setNumeroCuenta}
                         onFotoChange={handleCambioFoto}
                         onSubmit={handleGuardarUsuario}
                         mensaje={mensajeGuardar}
@@ -169,12 +240,14 @@ function Professional() {
 
                 <section className="admin-card-section">
                     <h2>3. Profesionales Registrados</h2>
+                    {/* SE PASA LA FUNCIÓN DE GENERAR PDF A LA TABLA */}
                     <UserTable
                         usuarios={usuarios}
                         confirmarEliminar={confirmarEliminar}
                         setConfirmarEliminar={setConfirmarEliminar}
                         ejecutarEliminacion={ejecutarEliminacion}
                         onEliminarClick={(id, nom) => setConfirmarEliminar({ visible: true, id, nombre: nom })}
+                        onGenerarCobro={generarCuentaCobro}
                     />
                 </section>
             </main>
