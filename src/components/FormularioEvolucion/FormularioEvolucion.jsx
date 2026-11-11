@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import { db } from '../../lib/firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
 import SignatureCanvas from 'react-signature-canvas';
 import datosEvaluacion from './evaluacion.json';
 import datosEvolucion from './evolucion.json';
@@ -56,12 +58,20 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
     };
 
     const confirmarFirma = () => {
-        if (firmaRef.current.isEmpty()) {
+        if (!firmaRef.current || firmaRef.current.isEmpty()) {
             alert("El lienzo de firma está vacío. Por favor, pida al paciente que firme.");
             return;
         }
-        const urlFirma = firmaRef.current.getTrimmedCanvas().toDataURL('image/png');
+
+        // Obtenemos directamente el lienzo, sin utilizar trim-canvas.
+        const canvas = firmaRef.current.getCanvas();
+
+        // Convertimos la firma en una imagen PNG Base64.
+        const urlFirma = canvas.toDataURL('image/png');
+
+        // Guardamos la firma dentro de formData.
         manejarCambio('firma_paciente', urlFirma);
+
         setFirmaConfirmada(true);
     };
 
@@ -77,6 +87,25 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
             setCargando(true);
             const cedulaProfesional = localStorage.getItem("usuarioCedula") || "";
 
+            if (!cedulaProfesional) {
+                throw new Error("No se encontró la cédula del profesional.");
+            }
+
+            // Consultar los datos del profesional en Firebase.
+            const profesionalRef = doc(db, "autorizados", cedulaProfesional);
+            const profesionalSnap = await getDoc(profesionalRef);
+
+            if (!profesionalSnap.exists()) {
+                throw new Error("No se encontró el profesional en Firebase.");
+            }
+
+            const datosProfesional = profesionalSnap.data();
+            const nombreProfesional = datosProfesional.nombre || "";
+
+            if (!nombreProfesional) {
+                throw new Error("El profesional no tiene un nombre registrado.");
+            }
+
             const { error } = await supabase
                 .from('evoluciones_atencion')
                 .insert([
@@ -84,6 +113,7 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
                         cita_id: citaId,
                         paciente_id: pacienteId,
                         profesional_cedula: cedulaProfesional,
+                        profesional_nombre: nombreProfesional,
                         profesion_especialidad: profesion,
                         tipo_registro: esEvaluacionInicial ? 'evaluacion_inicial' : 'evolucion_seguimiento',
                         datos_formulario: formData
@@ -200,7 +230,7 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
                                 className="btn-guardar"
                                 disabled={cargando || !firmaConfirmada}
                             >
-                                {cargando ? 'Guardando...' : (citaId ? 'Guardar y Finalizar Cita' : 'Guardar Registro Clínico')}
+                                {cargando ? 'Guardando...' : (citaId ? 'Guardar y Finalizar Cita' : 'Guardar')}
                             </button>
                         </div>
                     </form>

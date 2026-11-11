@@ -799,3 +799,325 @@
     cursor: not-allowed;
     opacity: 0.55;
 }
+
+
+/* =========================================
+   BOTÓN: CONSULTAR HISTORIAL CLÍNICO
+========================================= */
+.btn-historial-clinico {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background-color: #f8fafc;
+    /* Gris muy claro/azulado */
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    /* Gris oscuro para el texto */
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Efecto al pasar el mouse */
+.btn-historial-clinico:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0056D2;
+    /* Azul corporativo */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+/* Efecto al hacer clic */
+.btn-historial-clinico:active {
+    transform: scale(0.99);
+}
+
+/* El icono de la izquierda (📋) */
+.btn-historial-clinico span:first-child {
+    font-size: 1.1rem;
+}
+
+/* El texto central */
+.btn-historial-clinico span:nth-child(2) {
+    flex-grow: 1;
+    /* Esto empuja la flecha hacia el extremo derecho */
+    text-align: left;
+}
+
+/* La flecha de la derecha (→) */
+.historial-flecha {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #94a3b8;
+    transition: transform 0.2s ease-in-out, color 0.2s ease;
+}
+
+/* Animación: la flecha se mueve a la derecha al hacer hover en el botón */
+.btn-historial-clinico:hover .historial-flecha {
+    transform: translateX(4px);
+    color: #0056D2;
+    /* Se vuelve azul junto con el texto */
+}
+
+/* =========================================
+   OVERLAY Y CONTENEDOR PRINCIPAL (MODAL)
+========================================= */
+.historial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.6);
+    /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(4px);
+    /* Efecto difuminado moderno */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.historial-modal {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* =========================================
+   HEADER DEL MODAL
+========================================= */
+.historial-header {
+    background-color: #f8fafc;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.historial-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.historial-header p {
+    margin: 4px 0 0 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #0056D2;
+    /* Azul corporativo */
+}
+
+.historial-cerrar {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.historial-cerrar:hover {
+    background-color: #e2e8f0;
+    color: #ef4444;
+}
+
+/* =========================================
+   CONTENIDO CENTRAL
+========================================= */
+.historial-contenido {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.historial-contenido>p {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 20px 0;
+}
+
+.historial-resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.historial-resumen h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.historial-resumen span {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* =========================================
+   LISTA DE REGISTROS (TARJETAS)
+========================================= */
+.historial-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.historial-registro-item {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6;
+    /* Acento azul a la izquierda */
+    border-radius: 8px;
+    padding: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.historial-registro-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.historial-registro-item strong {
+    display: block;
+    font-size: 1rem;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.historial-registro-item p {
+    margin: 0 0 8px 0;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.historial-registro-item small {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f1f5f9;
+    color: #64748b;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* =========================================
+   BOTONES Y ESTADOS DE ERROR
+========================================= */
+.btn-descargar-historial {
+    margin-top: 10px;
+    background-color: #0056D2;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-descargar-historial:hover:not(:disabled) {
+    background-color: #0043a4;
+}
+
+.btn-descargar-historial:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.btn-descargar-historial:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.historial-error {
+    background-color: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+
+.historial-error p {
+    color: #b91c1c;
+    margin: 0 0 12px 0;
+    font-weight: 500;
+}
+
+.historial-error button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.historial-error button:hover {
+    background-color: #dc2626;
+}
+
+/* =========================================
+   ANIMACIONES
+========================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

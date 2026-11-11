@@ -27,7 +27,7 @@ function Professional() {
     const [pin, setPin] = useState('');
     const [profesion, setProfesion] = useState('');
 
-    // NUEVOS ESTADOS BANCARIOS
+    
     const [banco, setBanco] = useState('');
     const [numeroCuenta, setNumeroCuenta] = useState('');
 
@@ -170,7 +170,7 @@ function Professional() {
 
             // 6. Generar el PDF enviándole los datos procesados 
             // (puedes cambiar el 28000 por la tarifa real que manejen)
-            generarPDFCobro(profesional, atencionesParaPDF, 28000);
+            await generarPDFCobro(profesional, atencionesParaPDF, 28000);
 
         } catch (error) {
             console.error("Error al recopilar datos para el cobro:", error);

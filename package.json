@@ -12,7 +12,9 @@
   "dependencies": {
     "@capacitor/android": "^8.5.2",
     "@capacitor/cli": "^8.4.3",
-    "@capacitor/core": "^8.5.2",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/share": "^8.0.3",
     "@emailjs/browser": "^5.0.3",
     "@supabase/supabase-js": "^2.97.0",
     "firebase": "^9.14.0",
