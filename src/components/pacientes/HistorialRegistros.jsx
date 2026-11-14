@@ -3,6 +3,9 @@ import { obtenerRegistrosPaciente } from '../../services/evolucionesService';
 import generarHistorialPDF from '../../utils/generarRegistroPDF';
 import datosEvaluacion from '../FormularioEvolucion/evaluacion.json';
 import datosEvolucion from '../FormularioEvolucion/evolucion.json';
+import UseAnimations from 'react-useanimations';
+import download from 'react-useanimations/lib/download';
+import loading from 'react-useanimations/lib/loading';
 
 export default function HistorialRegistros({
     pacienteId,
@@ -52,11 +55,11 @@ export default function HistorialRegistros({
         };
     }, [pacienteId]);
 
-    const descargarHistorial = () => {
+    const descargarHistorial = async () => {
         try {
             setGenerandoPDF(true);
 
-            generarHistorialPDF({
+            await generarHistorialPDF({
                 paciente,
                 registros,
                 datosEvaluacion,
@@ -130,7 +133,7 @@ export default function HistorialRegistros({
                                 <h3>Registros disponibles</h3>
 
                                 <span>
-                                    {registros.length} registros encontrados
+                                    {registros.length}
                                 </span>
                             </div>
 
@@ -169,16 +172,44 @@ export default function HistorialRegistros({
                                 })}
                             </div>
 
-                            <button
-                                type="button"
-                                className="btn-descargar-historial"
-                                onClick={descargarHistorial}
-                                disabled={generandoPDF}
-                            >
-                                {generandoPDF
-                                    ? 'Generando PDF...'
-                                    : '📄 Descargar historial clínico completo'}
-                            </button>
+                            {generandoPDF ? (
+                                <button
+                                    type="button"
+                                    className="btn-descargar-historial"
+                                    disabled
+                                >
+                                    <UseAnimations
+                                        animation={loading}
+                                        size={22}
+                                        strokeColor="currentColor"
+                                        autoplay
+                                        loop
+                                    />
+                                    <span>Generando PDF...</span>
+                                </button>
+                            ) : (
+                                <UseAnimations
+                                    animation={download}
+                                    size={22}
+                                    strokeColor="currentColor"
+                                    loop={false}
+                                    autoplay={true}
+                                    render={(eventProps, animationProps) => (
+                                        <button
+                                            {...eventProps}
+                                            type="button"
+                                            className="btn-descargar-historial"
+                                            onClick={(e) => {
+                                                eventProps.onClick?.(e);
+                                                descargarHistorial();
+                                            }}
+                                        >
+                                            <div {...animationProps} />
+                                            <span>Descargar historial</span>
+                                        </button>
+                                    )}
+                                />
+                            )}
                         </>
                     )}
                 </div>

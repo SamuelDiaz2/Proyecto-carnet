@@ -1,6 +1,10 @@
 import logoEmpresa from "../assets/logo.png"; // <-- Asegúrate de que tu archivo se llame .png
 import fondoPDF from "../assets/logo.png";    // <-- Igual aquí
 import { jsPDF } from "jspdf";
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+
 
 const cargarImagen = async (ruta) => {
     const respuesta = await fetch(ruta);
@@ -318,8 +322,26 @@ export const generarHistorialPDF = async ({
         y += 60;
     });
 
-    const nombreArchivo = normalizarTexto(paciente.nombre || "paciente");
-    pdf.save(`Historial_Clinico_${nombreArchivo}.pdf`);
+    const nombreArchivo = `Historial_Clinico_${normalizarTexto(paciente.nombre || "paciente")}.pdf`;
+
+    if (Capacitor.isNativePlatform()) {
+        const pdfBase64 = pdf.output("datauristring").split(",")[1];
+
+        const resultado = await Filesystem.writeFile({
+            path: nombreArchivo,
+            data: pdfBase64,
+            directory: Directory.Cache,
+        });
+
+        await Share.share({
+            title: "Historial Clínico",
+            text: `Historial clínico de ${paciente.nombre || "paciente"}`,
+            url: resultado.uri,
+            dialogTitle: "Guardar o compartir historial",
+        });
+    } else {
+        pdf.save(nombreArchivo);
+    }
 };
 
 export default generarHistorialPDF;

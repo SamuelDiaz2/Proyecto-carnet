@@ -137,7 +137,7 @@ export const generarPDFCobro = async (profesional, atencionesAgrupadas, tarifaPo
             // 3. Abrir el menú nativo para compartir/guardar el archivo
             await Share.share({
                 title: 'Cuenta de Cobro',
-                text: `Cuenta de cobro generada para ${profesional.nombre}`,
+                text: `Cuenta de cobro ${profesional.nombre}`,
                 url: result.uri,
                 dialogTitle: 'Compartir o Guardar PDF',
             });

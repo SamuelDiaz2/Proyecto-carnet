@@ -122,8 +122,8 @@ export default function PacienteModal({
                                     }}
                                 >
                                     {registroPaciente.profesional
-                                        ? "Reasignar profesional"
-                                        : "Asignar profesional"}
+                                        ? "Reasignar"
+                                        : "Asignar"}
                                 </button>
                             </div>
                         )}
@@ -136,24 +136,14 @@ export default function PacienteModal({
                                 onClick={() => setMostrarHistorial(true)}
                             >
                                 <span>📋</span>
-                                <span>Consultar historial clínico</span>
+                                <span>Historial clínico</span>
                             </button>
                         )}
 
                         <div className="sesiones-counter-box">
                             <span>
-                                🎯 <strong>Totales:</strong>{" "}
-                                {pacienteSeleccionado.sesionesTotales || 10}
-                            </span>
-
-                            <span>
-                                ✅ <strong>Atendidas:</strong>{" "}
+                                <strong>Sesiones Atendidas:</strong>{" "}
                                 {pacienteSeleccionado.sesionesRealizadas || 0}
-                            </span>
-
-                            <span className="sesiones-restantes">
-                                ⏳ <strong>Restantes:</strong>{" "}
-                                {pacienteSeleccionado.sesionesRestantes ?? 0}
                             </span>
                         </div>
 

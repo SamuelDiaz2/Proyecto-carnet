@@ -13,6 +13,9 @@ import { UserForm } from '../../components/formulario/formulario';
 import { UserTable } from '../../components/tablausuarios/tablausuarios';
 import { compressImage } from '../../utils/imageCompressor';
 import './profesional.css';
+import UseAnimations from 'react-useanimations';
+import arrowLeft from 'react-useanimations/lib/arrowLeft';
+import logOut from 'react-useanimations/lib/logOut';
 
 function Professional() {
     const navigate = useNavigate();
@@ -27,7 +30,7 @@ function Professional() {
     const [pin, setPin] = useState('');
     const [profesion, setProfesion] = useState('');
 
-    
+
     const [banco, setBanco] = useState('');
     const [numeroCuenta, setNumeroCuenta] = useState('');
 
@@ -204,16 +207,35 @@ function Professional() {
     return (
         <div className="professional-mobile-layout">
             <header className="professional-header">
-                <button onClick={() => navigate('/carnet')} className="btn-back-top" aria-label="Volver al Carnet">
-                    Volver
-                </button>
+                <UseAnimations
+                    animation={arrowLeft}
+                    size={30}
+                    strokeColor="currentColor"
+                    render={(eventProps, animationProps) => (
+                        <button
+                            {...eventProps} className="btn-back-top" onClick={() => navigate(-1)}
+                        >
+                            <div {...animationProps} />
+                        </button>
+                    )}
+                />
                 <div>
                     <h1>Panel de Control</h1>
                     <p>Gestión interna de profesionales</p>
                 </div>
-                <button onClick={() => signOut(auth)} className="btn-logout-top" aria-label="Cerrar Sesión">
-                    Salir
-                </button>
+                <UseAnimations
+                    animation={logOut}
+                    size={30}
+                    strokeColor="currentColor"
+                    render={(eventProps, animationProps) => (
+                        <button
+                            {...eventProps} className="btn-logout-top" onClick={() => signOut(auth)} aria-label="Cerrar Sesión"
+                        >
+                            <div {...animationProps} />
+                        </button>
+                    )}
+                />
+
             </header>
 
             <main className="professional-content-stream">

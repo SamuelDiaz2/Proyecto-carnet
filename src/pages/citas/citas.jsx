@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { db } from '../../lib/firebaseConfig.js';
 import { doc, getDoc } from 'firebase/firestore';
 import SideMenu from '../../components/side-menu/side-menu.jsx';
-import { coincideProfesionCita } from '../../utils/filterServices.js'; // <--- IMPORTAMOS TU FILTRO
+import { coincideProfesionCita } from '../../utils/filterServices.js';
 import './citas.css';
 
 function CitasProfesional() {
@@ -121,7 +121,6 @@ function CitasProfesional() {
                 throw new Error('Otro usuario asignó este paciente primero. Actualiza la lista e inténtalo de nuevo.');
             }
 
-            // Creamos la cita para que aparezca en "Mis Pacientes".
             const fechaHoy = new Date().toISOString().split('T')[0];
             const horaActual = new Date().toTimeString().split(' ')[0];
 
@@ -138,7 +137,7 @@ function CitasProfesional() {
                         modalidad: paciente.modalidad_preferida || '30 minutos',
                         fecha: fechaHoy,
                         hora: horaActual,
-                        estado: 'confirmada', // Nace confirmada para ti
+                        estado: 'confirmada',
                         profesional: nombreProfesional
                     }
                 ]);
@@ -161,11 +160,9 @@ function CitasProfesional() {
         }
     };
 
-    // FILTRADO USANDO TU UTILIDAD OFICIAL
     const pacientesFiltrados = useMemo(() => {
         if (!profesionUsuario) return [];
         return pacientes.filter(paciente => {
-            // Creamos un objeto simulando la estructura que espera coincideProfesionCita
             const objetoParaFiltrar = {
                 servicio: paciente.servicio_principal,
                 especialidad: paciente.servicio_principal,
@@ -216,95 +213,89 @@ function CitasProfesional() {
                     <div className="citas-grid">
                         {pacientesFiltrados.map((paciente) => {
                             const profesionalAsignado = (paciente.profesional || '').trim();
-                            const asignadoAMi = profesionalAsignado.toLowerCase() === nombreProfesional.trim().toLowerCase();
 
                             return (
-                            <div key={paciente.id} className="cita-card">
-                                <div className="cita-header">
-                                    <span className="cita-estado confirmada">
-                                        Registrado
-                                    </span>
-                                </div>
-
-                                <div className="cita-body">
-                                    <h3>{paciente.nombre_completo || 'Sin nombre'}</h3>
-
-                                    <p className="cita-identificacion">
-                                        <strong>Documento:</strong> {paciente.tipo_identificacion || 'C.C'} {paciente.numero_identificacion}
-                                    </p>
-
-                                    {paciente.edad && (
-                                        <p className="cita-edad">
-                                            <strong>Edad:</strong> {paciente.edad} años
-                                        </p>
-                                    )}
-
-                                    {paciente.telefono && (
-                                        <p className="cita-telefono">
-                                            <strong>Teléfono:</strong> {paciente.telefono}
-                                        </p>
-                                    )}
-
-                                    {paciente.diagnostico && (
-                                        <p className="cita-diagnostico">
-                                            <strong>Diagnóstico:</strong> {paciente.diagnostico}
-                                        </p>
-                                    )}
-
-                                    {paciente.servicio_principal && (
-                                        <p className="cita-servicio">
-                                            <strong>Servicio:</strong> {paciente.servicio_principal}
-                                        </p>
-                                    )}
-
-                                    {paciente.modalidad_preferida && (
-                                        <p className="cita-modalidad">
-                                            <strong>Modalidad:</strong> {paciente.modalidad_preferida}
-                                        </p>
-                                    )}
-
-                                    {paciente.profesional && (
-                                        <p className="cita-profesional">
-                                            <strong>Profesional Asignado:</strong> {paciente.profesional}
-                                        </p>
-                                    )}
-
-                                    <hr className="divider" />
-
-                                    <p className="cita-ubicacion-title"><strong>Ubicación:</strong></p>
-
-                                    {paciente.municipio_ciudad && (
-                                        <p className="cita-municipio">
-                                            📍 {paciente.municipio_ciudad} {paciente.barrio_localidad ? `- ${paciente.barrio_localidad}` : ''}
-                                        </p>
-                                    )}
-
-                                    {paciente.direccion && (
-                                        <p className="cita-direccion">
-                                            🏠 {paciente.direccion}
-                                        </p>
-                                    )}
-
-                                    <div className="cita-acciones">
-                                        <button
-                                            className={`btn-seleccionar ${asignadoAMi ? 'btn-asignado-propio' : ''}`}
-                                            disabled={actualizandoId === paciente.id || Boolean(profesionalAsignado)}
-                                            onClick={() => handleAsignarsePaciente(paciente)}
-                                        >
-                                            {actualizandoId === paciente.id
-                                                ? 'Actualizando...'
-                                                : profesionalAsignado
-                                                    ? esAdmin
-                                                        ? `Asignado a ${profesionalAsignado} · Reasignar en Directorio`
-                                                        : asignadoAMi
-                                                            ? '✓ Asignado a Ti'
-                                                            : `Asignado a ${profesionalAsignado}`
-                                                    : 'Asignarme este Paciente'}
-                                        </button>
+                                <div key={paciente.id} className="cita-card">
+                                    <div className="cita-header">
+                                        <span className="cita-estado confirmada">
+                                            Registrado
+                                        </span>
                                     </div>
 
+                                    <div className="cita-body">
+                                        <h3>{paciente.nombre_completo || 'Sin nombre'}</h3>
+
+                                        <p className="cita-identificacion">
+                                            <strong>Documento:</strong> {paciente.tipo_identificacion || 'C.C'} {paciente.numero_identificacion}
+                                        </p>
+
+                                        {paciente.edad && (
+                                            <p className="cita-edad">
+                                                <strong>Edad:</strong> {paciente.edad} años
+                                            </p>
+                                        )}
+
+                                        {paciente.telefono && (
+                                            <p className="cita-telefono">
+                                                <strong>Teléfono:</strong> {paciente.telefono}
+                                            </p>
+                                        )}
+
+                                        {paciente.diagnostico && (
+                                            <p className="cita-diagnostico">
+                                                <strong>Diagnóstico:</strong> {paciente.diagnostico}
+                                            </p>
+                                        )}
+
+                                        {paciente.servicio_principal && (
+                                            <p className="cita-servicio">
+                                                <strong>Servicio:</strong> {paciente.servicio_principal}
+                                            </p>
+                                        )}
+
+                                        {paciente.modalidad_preferida && (
+                                            <p className="cita-modalidad">
+                                                <strong>Modalidad:</strong> {paciente.modalidad_preferida}
+                                            </p>
+                                        )}
+
+                                        {paciente.profesional && (
+                                            <p className="cita-profesional">
+                                                <strong>Profesional Asignado:</strong> {paciente.profesional}
+                                            </p>
+                                        )}
+
+                                        <hr className="divider" />
+
+                                        <p className="cita-ubicacion-title"><strong>Ubicación:</strong></p>
+
+                                        {paciente.municipio_ciudad && (
+                                            <p className="cita-municipio">
+                                                📍 {paciente.municipio_ciudad} {paciente.barrio_localidad ? `- ${paciente.barrio_localidad}` : ''}
+                                            </p>
+                                        )}
+
+                                        {paciente.direccion && (
+                                            <p className="cita-direccion">
+                                                🏠 {paciente.direccion}
+                                            </p>
+                                        )}
+
+                                        {!profesionalAsignado && (
+                                            <div className="cita-acciones">
+                                                <button
+                                                    className="btn-seleccionar"
+                                                    disabled={actualizandoId === paciente.id}
+                                                    onClick={() => handleAsignarsePaciente(paciente)}
+                                                >
+                                                    {actualizandoId === paciente.id
+                                                        ? 'Actualizando...'
+                                                        : 'Asignarme este Paciente'}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
                             );
                         })}
                     </div>

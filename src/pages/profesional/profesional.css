@@ -342,6 +342,13 @@
     color: #4f46e5;
 }
 
+.acciones-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
 .btn-table-delete {
     background-color: #ef4444;
     color: white;
@@ -350,6 +357,9 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 13px;
+    align-items: center;
+    gap: 6px;
 }
 
 .confirm-delete-box {
