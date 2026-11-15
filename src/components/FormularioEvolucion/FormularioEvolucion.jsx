@@ -141,11 +141,42 @@ function FormularioEvolucion({ citaId, pacienteId, profesion, onCerrar, onGuarda
         }
     };
 
-    const claveProfesion = profesion ? profesion.toLowerCase().replace(/á/g, 'a').replace(/í/g, 'i').replace(/\s+/g, '_') : 'fonoaudiologia';
+    const claveProfesion = profesion
+        ? profesion
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "_")
+            .trim()
+        : "fonoaudiologia";
+
+    const obtenerSeccionesEvolucion = (clave) => {
+        // 1. Formato exclusivo para Psicología
+        if (clave === "psicologia") {
+            return datosEvolucion.evoluciones?.observaciones_clinicas || [];
+        }
+
+        // 2. Si coincide exactamente con una clave del JSON (fonoaudiologia, terapia_ocupacional, terapia_fisica)
+        if (datosEvolucion.evoluciones?.[clave]) {
+            return datosEvolucion.evoluciones[clave];
+        }
+
+        // 3. Variantes de fisioterapia (ej. "fisioterapia", "fisioterapia_con_terapia_respiratoria")
+        if (clave.includes("fisioterapia")) {
+            return datosEvolucion.evoluciones?.terapia_fisica || [];
+        }
+
+        // 4. Respaldo estándar para cualquier otra especialidad (nunca observaciones_clinicas)
+        return (
+            datosEvolucion.evoluciones?.terapia_fisica ||
+            datosEvolucion.evoluciones?.fonoaudiologia ||
+            []
+        );
+    };
 
     const seccionesActuales = esEvaluacionInicial
         ? (datosEvaluacion.servicio?.[claveProfesion] || datosEvaluacion.servicio?.fonoaudiologia || [])
-        : (datosEvolucion.evoluciones?.[claveProfesion] || datosEvolucion.evoluciones?.observaciones_clinicas || []);
+        : obtenerSeccionesEvolucion(claveProfesion);
 
     return (
         <div className="modal-overlay">

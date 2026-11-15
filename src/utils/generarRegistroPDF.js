@@ -259,7 +259,37 @@ export const generarHistorialPDF = async ({
         y += 12;
 
         const respuestas = registro.datos_formulario || {};
-        const secciones = obtenerSecciones(registro, datosEvaluacion, datosEvolucion);
+        const obtenerSecciones = (registro, datosEvaluacion, datosEvolucion) => {
+            const profesion = normalizarTexto(
+                registro.profesion_especialidad || "fonoaudiologia"
+            );
+
+            if (registro.tipo_registro === "evaluacion_inicial") {
+                return (
+                    datosEvaluacion.servicio?.[profesion] ||
+                    datosEvaluacion.servicio?.fonoaudiologia ||
+                    []
+                );
+            }
+
+            if (profesion === "psicologia") {
+                return datosEvolucion.evoluciones?.observaciones_clinicas || [];
+            }
+
+            if (datosEvolucion.evoluciones?.[profesion]) {
+                return datosEvolucion.evoluciones[profesion];
+            }
+
+            if (profesion.includes("fisioterapia")) {
+                return datosEvolucion.evoluciones?.terapia_fisica || [];
+            }
+
+            return (
+                datosEvolucion.evoluciones?.terapia_fisica ||
+                datosEvolucion.evoluciones?.fonoaudiologia ||
+                []
+            );
+        };
 
         secciones.forEach((seccion) => {
             const camposConRespuesta = (seccion.campos || []).filter(campo => {
